@@ -1,0 +1,7 @@
+{
+  "share_mode": "public",
+  "respect_gitignore": true,
+  "allow": [],
+  "exclude_dirs": [],
+  "_comment": "SmartPangolin policy. `allow` force-includes a withheld file (audited)."
+}

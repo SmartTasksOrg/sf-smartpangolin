@@ -1,0 +1,9 @@
+{
+  "share_mode": "public",
+  "source_only": false,
+  "max_chars": 500000,
+  "allow": ["docs/scorecard_snippet.py"],
+  "deny_globs": ["*.internal.md", "infra/*.tfvars.json"],
+  "exclude_folders": ["fixtures"],
+  "exclude_paths": ["src/generated"]
+}

@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+ft-venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+# SmartPangolin's own generated artifacts live one level up, but ignore them if run in-tree:
+extracted_source/
+share_archive/
+file_folder_tree.txt
+file_folder_path.txt
+# Never commit real secrets:
+.env
+.secret/
+!.secret/.gitignore

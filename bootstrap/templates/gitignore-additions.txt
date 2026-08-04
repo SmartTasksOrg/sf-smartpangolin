@@ -1,0 +1,6 @@
+
+# --- SmartPangolin standardized secret locations ---
+.secret/
+.pangolin.local.json
+*.env
+!*.env.example

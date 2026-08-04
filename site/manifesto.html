@@ -1,0 +1,1180 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Pangolin Code — SmartPangolin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+ :root{--burrow:#1b1e17;--burrow2:#242820;--parch:#ece4d2;--dim:#c9c2b2;
+   --keratin:#cd8e3f;--keratin-hi:#e6b877;--line:rgba(236,228,210,.13);--muted:#6d7061}
+ *{margin:0;box-sizing:border-box}
+ body{background:var(--burrow);color:var(--parch);font-family:'IBM Plex Sans',system-ui,sans-serif;line-height:1.6}
+ .wrap{max-width:860px;margin:0 auto;padding:0 26px}
+ header{text-align:center;padding:76px 0 40px}
+ .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.22em;
+   text-transform:uppercase;color:var(--keratin);margin-bottom:18px}
+ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-.03em;
+   font-size:clamp(2.4rem,7vw,4rem);line-height:.98}
+ header p{color:var(--dim);max-width:52ch;margin:18px auto 0;font-size:1.08rem}
+ ol{list-style:none;padding:0;margin:26px 0 0}
+ .cmd{display:grid;grid-template-columns:88px 1fr;gap:20px;align-items:center;
+   padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--burrow2);margin-bottom:14px}
+ .cmd.rebel{border-color:rgba(205,142,63,.4);background:linear-gradient(180deg,rgba(205,142,63,.07),var(--burrow2))}
+ .ic{width:88px;height:88px;background:radial-gradient(circle at 50% 38%,#2c3125,#20241c);
+   border-radius:14px;display:grid;place-items:center;padding:8px}
+ .ic svg{width:100%;height:100%}
+ .num{font-family:'IBM Plex Mono',monospace;color:var(--keratin);font-size:.82rem;letter-spacing:.12em}
+ .tx h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.24rem;margin:3px 0 5px}
+ .tx p{color:var(--dim);font-size:.98rem}
+ footer{text-align:center;padding:50px 0 70px;color:var(--muted);font-size:.9rem}
+ footer a{color:var(--dim)}
+ @media(max-width:560px){.cmd{grid-template-columns:64px 1fr;gap:14px;padding:16px}.ic{width:64px;height:64px}}
+</style></head><body>
+<div class="wrap">
+<header>
+ <div class="eyebrow">forage · seal · prove</div>
+ <h1>The Pangolin Code</h1>
+ <p>Security isn't the opposite of bold. Forage in the open, then curl into armor nothing gets through. Share everything worth sharing — and stay unbothered about the parts you keep locked.</p>
+</header>
+<ol>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+  <g id="c-cape">
+    <path d="M120 118 C86 118 66 132 60 168 C58 182 60 210 66 226
+             C90 214 150 214 174 226 C180 210 182 182 180 168
+             C174 132 154 118 120 118 Z" fill="#4a5a63"/>
+    <path d="M120 118 C104 118 92 126 88 144 L120 150 L152 144
+             C148 126 136 118 120 118 Z" fill="#5c6f79"/>
+  </g>
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-deerstalker">
+    <path d="M78 66 q-16 2 -18 10 q22 6 40 3 Z" fill="#8a7550"/>
+    <path d="M162 66 q16 2 18 10 q-22 6 -40 3 Z" fill="#8a7550"/>
+    <path d="M120 34 C92 34 74 50 74 66 q46 10 92 0 C166 50 148 34 120 34 Z" fill="#9c8560"/>
+    <path d="M74 66 q46 12 92 0 q2 8 -6 12 q-40 9 -80 0 q-8 -4 -6 -12 Z" fill="#7d6a48"/>
+    <g stroke="#6b5a3c" stroke-width="1.4" opacity=".55">
+      <path d="M88 44 L100 74 M108 40 L118 76 M128 40 L134 76 M148 46 L150 72"/>
+      <path d="M78 56 L164 56"/>
+    </g>
+    <circle cx="120" cy="40" r="4" fill="#6b5a3c"/>
+  </g>
+  <g id="c-magnifier" transform="rotate(20 176 176)">
+    <circle cx="176" cy="168" r="15" fill="none" stroke="#4a3b28" stroke-width="5"/>
+    <circle cx="176" cy="168" r="11" fill="#bfe0ea" opacity=".55"/>
+    <rect x="172" y="182" width="8" height="26" rx="4" fill="#6b4a2c"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">I</span><h3>Forage before you flee.</h3><p>Know every secret in your tree before it leaves the burrow.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-ninja-hood">
+    <path d="M120 44 C86 44 72 66 72 92 C72 104 78 116 90 122
+             q30 10 60 0 C162 116 168 104 168 92 C168 66 154 44 120 44 Z" fill="#2b2f36"/>
+    <path d="M84 92 q36 -14 72 0 q-4 12 -36 12 q-32 0 -36 -12 Z" fill="#e9e4d6"/>
+    <ellipse class="eyew" cx="105" cy="92" rx="10" ry="8"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="10" ry="8"/>
+    <circle class="ink" cx="107" cy="93" r="5"/>
+    <circle class="ink" cx="133" cy="93" r="5"/>
+    <circle cx="105" cy="91" r="1.6" fill="#fff"/><circle cx="131" cy="91" r="1.6" fill="#fff"/>
+    <path d="M168 88 l22 -4 l-4 8 l16 0 l-20 8 Z" fill="#2b2f36"/>
+  </g>
+  <g id="c-ninja-belt">
+    <rect x="84" y="176" width="72" height="14" rx="2" fill="#3a2f6b"/>
+    <path d="M118 190 l-6 22 l6 -4 Z" fill="#3a2f6b"/>
+    <path d="M126 190 l6 22 l-6 -4 Z" fill="#2e2556"/>
+  </g>
+  <g id="c-shuriken" transform="rotate(15 66 176)">
+    <path d="M66 162 l5 9 l9 5 l-9 5 l-5 9 l-5 -9 l-9 -5 l9 -5 Z" fill="#8b95a1"/>
+    <circle cx="66" cy="176" r="3" fill="#2b2f36"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">II</span><h3>When in doubt, curl up.</h3><p>If a file can't be proven safe, it doesn't ship. Fail closed, always.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-gi">
+    <path d="M120 124 L150 138 L150 210 Q120 220 90 210 L90 138 Z" fill="#f4f1e9"/>
+    <path d="M120 124 L96 136 L120 176 Z" fill="#e6e1d3"/>
+    <path d="M120 124 L144 136 L120 176 Z" fill="#fbfaf5"/>
+    <path d="M120 124 L96 136 L106 200 L120 196 Z" fill="#ece7db"/>
+    <path d="M120 124 L144 136 L134 200 L120 196 Z" fill="#f6f3ec"/>
+    <rect x="88" y="188" width="64" height="13" rx="2" fill="#23252a"/>
+    <path d="M112 201 l-8 20 l8 -3 Z" fill="#23252a"/>
+    <path d="M128 201 l8 20 l-8 -3 Z" fill="#1a1c20"/>
+    <rect x="112" y="192" width="16" height="8" rx="2" fill="#15171a"/>
+  </g>
+  <g id="c-headband">
+    <path d="M74 78 q46 -14 92 0 l0 9 q-46 -12 -92 0 Z" fill="#c0392b"/>
+    <circle cx="120" cy="82" r="6" fill="#f4f1e9"/>
+    <circle cx="120" cy="82" r="3" fill="#c0392b"/>
+    <path d="M166 80 l20 -6 l-2 8 l16 -2 l-18 10 Z" fill="#c0392b"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">III</span><h3>Never half-scrub.</h3><p>A file goes whole or not at all. A redacted secret is a secret that survived.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-diploma" transform="rotate(-12 172 178)">
+    <rect x="160" y="168" width="26" height="12" rx="6" fill="#f2ead6"/>
+    <rect x="158" y="171" width="30" height="6" rx="3" fill="#c0392b"/>
+  </g>
+  <g id="c-mortarboard">
+    <path d="M88 56 q32 10 64 0 l0 8 q-32 10 -64 0 Z" fill="#26262b"/>
+    <path d="M120 40 L176 56 L120 72 L64 56 Z" fill="#1f1f24"/>
+    <path d="M120 44 L166 56 L120 68 L74 56 Z" fill="#2b2b31"/>
+    <circle cx="120" cy="56" r="3" fill="#e8c558"/>
+    <path d="M120 56 L150 58 L150 84" stroke="#e8c558" stroke-width="2" fill="none"/>
+    <path d="M150 84 l-4 10 l8 0 Z" fill="#e8c558"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">IV</span><h3>Keep every receipt.</h3><p>Manifest, audit, and hash ride with the share — or it isn't a share.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+</svg>
+</div>
+  <div class="tx"><span class="num">V</span><h3>Same tree, same seal.</h3><p>If the payload didn't change, neither does the fingerprint.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-mil-shoulders">
+    <rect x="52" y="120" width="26" height="12" rx="3" fill="#4d5a34"/>
+    <rect x="162" y="120" width="26" height="12" rx="3" fill="#4d5a34"/>
+    <g fill="#e8c558"><circle cx="58" cy="126" r="2.4"/><circle cx="66" cy="126" r="2.4"/>
+      <circle cx="176" cy="126" r="2.4"/><circle cx="184" cy="126" r="2.4"/></g>
+  </g>
+  <g id="c-medals">
+    <rect x="96" y="150" width="10" height="14" rx="2" fill="#c0392b"/>
+    <rect x="108" y="150" width="10" height="14" rx="2" fill="#2c6e9c"/>
+    <rect x="120" y="150" width="10" height="14" rx="2" fill="#3f7a3a"/>
+    <circle cx="101" cy="168" r="4" fill="#e8c558"/>
+    <circle cx="113" cy="168" r="4" fill="#cfcfcf"/>
+    <circle cx="125" cy="168" r="4" fill="#d9a04a"/>
+  </g>
+  <g id="c-peaked-cap">
+    <path d="M72 60 q48 -12 96 0 l3 8 q-51 10 -102 0 Z" fill="#3f4a2c"/>
+    <path d="M120 34 C94 34 78 46 78 60 q42 10 84 0 C162 46 146 34 120 34 Z" fill="#4d5a34"/>
+    <rect x="76" y="58" width="88" height="9" rx="2" fill="#2b3220"/>
+    <path d="M78 67 q42 12 84 0 q4 6 -2 9 q-40 9 -80 0 q-6 -3 -2 -9 Z" fill="#20261a"/>
+    <circle cx="120" cy="50" r="7" fill="#e8c558"/>
+    <path d="M120 45 l1.6 4.5 l4.7 0 l-3.8 2.9 l1.4 4.6 l-3.9 -2.8 l-3.9 2.8 l1.4 -4.6 l-3.8 -2.9 l4.7 0 Z" fill="#8a6d1f"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">VI</span><h3>The .secret stays secret.</h3><p>What lives in the vault never travels. Not once. Not “just this time.”</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-suit">
+    <path d="M120 126 L150 140 L150 212 Q120 220 90 212 L90 140 Z" fill="#3c4048"/>
+    <path d="M120 126 L104 138 L120 176 Z" fill="#f2efe8"/>
+    <path d="M120 126 L136 138 L120 176 Z" fill="#f2efe8"/>
+    <path d="M120 126 L92 138 L112 172 L120 150 Z" fill="#2f333a"/>
+    <path d="M120 126 L148 138 L128 172 L120 150 Z" fill="#454a53"/>
+    <path d="M120 138 l-6 10 l6 40 l6 -40 Z" fill="#7a2230"/>
+    <path d="M120 138 l-6 10 l6 6 l6 -6 Z" fill="#93313f"/>
+    <circle cx="120" cy="150" r="2.4" fill="#6a1c28"/>
+  </g>
+  <g id="c-fedora">
+    <ellipse cx="120" cy="66" rx="52" ry="12" fill="#41372b"/>
+    <ellipse cx="120" cy="63" rx="34" ry="8" fill="#4e4234"/>
+    <path d="M88 62 q-2 -30 32 -30 q34 0 32 30 q-32 -10 -64 0 Z" fill="#584a39"/>
+    <path d="M90 58 q30 -9 60 0 l0 7 q-30 -8 -60 0 Z" fill="#33291e"/>
+    <path d="M112 56 q8 -3 16 0" stroke="#241d14" stroke-width="2" fill="none"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">VII</span><h3>Overrides sign their name.</h3><p>Bend a rule and it shows up in the fingerprint. No silent bypass.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-shades">
+    <rect x="86" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="126" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="112" y="86" width="16" height="4" fill="#15130f"/>
+    <path d="M86 85 L72 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M154 85 L168 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <rect x="91" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+    <rect x="131" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">VIII</span><h3>Verify, never trust.</h3><p>A seal you didn't check is a rumor.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+  <g id="c-hood-back">
+    <path d="M120 116 C150 116 168 128 172 150 L172 210 Q120 220 68 210 L68 150
+             C72 128 90 116 120 116 Z" fill="#3b4652"/>
+  </g>
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-hoodie">
+    <path d="M120 120 C98 120 84 130 82 146 L98 150 Q120 142 142 150 L158 146
+             C156 130 142 120 120 120 Z" fill="#46525f"/>
+    <path d="M112 142 q8 6 16 0 l-2 30 q-6 4 -12 0 Z" fill="#333c46"/>
+    <circle cx="112" cy="176" r="2.5" fill="#e6b877"/>
+    <circle cx="128" cy="176" r="2.5" fill="#e6b877"/>
+    <path d="M112 176 q8 10 16 0" stroke="#e6b877" stroke-width="2" fill="none"/>
+  </g>
+  <g id="c-headphones">
+    <path d="M74 88 q46 -46 92 0" fill="none" stroke="#23262b" stroke-width="7" stroke-linecap="round"/>
+    <rect x="64" y="84" width="16" height="24" rx="6" fill="#2b2f36"/>
+    <rect x="160" y="84" width="16" height="24" rx="6" fill="#2b2f36"/>
+    <rect x="67" y="88" width="10" height="16" rx="4" fill="#cd8e3f"/>
+    <rect x="163" y="88" width="10" height="16" rx="4" fill="#cd8e3f"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">IX</span><h3>Ship the evidence with the artifact.</h3><p>Your source should travel like a model ships its weights — with proof.</p></div>
+</li>
+<li class="cmd rebel">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-leather">
+    <path d="M120 126 L152 140 L152 210 Q120 218 88 210 L88 140 Z" fill="#2a2622"/>
+    <path d="M120 126 L104 138 L120 176 Z" fill="#ece4d6"/>
+    <path d="M120 126 L136 138 L120 176 Z" fill="#ece4d6"/>
+    <path d="M120 126 L92 132 L106 152 L120 140 Z" fill="#3a332c"/>
+    <path d="M120 126 L148 132 L134 152 L120 140 Z" fill="#3a332c"/>
+    <path d="M120 140 L120 208" stroke="#5a5148" stroke-width="2"/>
+    <circle cx="111" cy="168" r="2" fill="#8a8078"/>
+    <circle cx="129" cy="168" r="2" fill="#8a8078"/>
+  </g>
+  <path d="M84 64 C84 40 100 30 120 30 C142 30 158 42 156 64
+           C150 54 140 52 132 56 C136 50 132 46 126 48
+           C130 42 124 40 120 45 C118 40 112 42 114 48
+           C108 44 104 50 108 56 C98 52 90 56 84 64 Z" fill="#1b1917"/>
+  <path d="M98 42 q10 -7 22 -6" stroke="#3c3630" stroke-width="2" fill="none"/>
+  <g id="c-shades">
+    <rect x="86" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="126" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="112" y="86" width="16" height="4" fill="#15130f"/>
+    <path d="M86 85 L72 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M154 85 L168 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <rect x="91" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+    <rect x="131" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+  </g>
+  <g id="c-thumbs">
+    <ellipse cx="80" cy="152" rx="13" ry="15" fill="#2a2622" transform="rotate(18 80 152)"/>
+    <circle cx="76" cy="138" r="10" fill="var(--scale)"/>
+    <rect x="72" y="120" width="8" height="18" rx="4" fill="var(--scale)"/>
+    <ellipse cx="160" cy="152" rx="13" ry="15" fill="#2a2622" transform="rotate(-18 160 152)"/>
+    <circle cx="164" cy="138" r="10" fill="var(--scale)"/>
+    <rect x="160" y="120" width="8" height="18" rx="4" fill="var(--scale)"/>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">X</span><h3>Be a little rebellious.</h3><p>Move fast. Break nothing that matters.</p></div>
+</li>
+<li class="cmd rebel">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-leather">
+    <path d="M120 126 L152 140 L152 210 Q120 218 88 210 L88 140 Z" fill="#2a2622"/>
+    <path d="M120 126 L104 138 L120 176 Z" fill="#ece4d6"/>
+    <path d="M120 126 L136 138 L120 176 Z" fill="#ece4d6"/>
+    <path d="M120 126 L92 132 L106 152 L120 140 Z" fill="#3a332c"/>
+    <path d="M120 126 L148 132 L134 152 L120 140 Z" fill="#3a332c"/>
+    <path d="M120 140 L120 208" stroke="#5a5148" stroke-width="2"/>
+    <circle cx="111" cy="168" r="2" fill="#8a8078"/>
+    <circle cx="129" cy="168" r="2" fill="#8a8078"/>
+  </g>
+  <path d="M84 64 C84 40 100 30 120 30 C142 30 158 42 156 64
+           C150 54 140 52 132 56 C136 50 132 46 126 48
+           C130 42 124 40 120 45 C118 40 112 42 114 48
+           C108 44 104 50 108 56 C98 52 90 56 84 64 Z" fill="#1b1917"/>
+  <path d="M98 42 q10 -7 22 -6" stroke="#3c3630" stroke-width="2" fill="none"/>
+  <g id="c-shades">
+    <rect x="86" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="126" y="82" width="28" height="17" rx="5" fill="#15130f"/>
+    <rect x="112" y="86" width="16" height="4" fill="#15130f"/>
+    <path d="M86 85 L72 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M154 85 L168 79" stroke="#15130f" stroke-width="3" stroke-linecap="round"/>
+    <rect x="91" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+    <rect x="131" y="86" width="9" height="4" rx="2" fill="#4a4a4a" opacity=".7"/>
+  </g>
+  <g id="c-rebel-arm">
+    <path d="M150 138 L176 74 L190 80 L166 150 Z" fill="#2a2622"/>
+    <circle cx="183" cy="74" r="12" fill="var(--scale)"/>
+    <g class="censor"><rect x="170.0" y="58.0" width="4.9" height="4.9" fill="#b07a3a"/><rect x="174.3" y="58.0" width="4.9" height="4.9" fill="#7a6a55"/><rect x="178.7" y="58.0" width="4.9" height="4.9" fill="#6f6f6f"/><rect x="183.0" y="58.0" width="4.9" height="4.9" fill="#9a5a2b"/><rect x="187.3" y="58.0" width="4.9" height="4.9" fill="#5c5c5c"/><rect x="191.7" y="58.0" width="4.9" height="4.9" fill="#c88a3c"/><rect x="170.0" y="62.3" width="4.9" height="4.9" fill="#8a8a8a"/><rect x="174.3" y="62.3" width="4.9" height="4.9" fill="#b07a3a"/><rect x="178.7" y="62.3" width="4.9" height="4.9" fill="#7a6a55"/><rect x="183.0" y="62.3" width="4.9" height="4.9" fill="#6f6f6f"/><rect x="187.3" y="62.3" width="4.9" height="4.9" fill="#9a5a2b"/><rect x="191.7" y="62.3" width="4.9" height="4.9" fill="#5c5c5c"/><rect x="170.0" y="66.7" width="4.9" height="4.9" fill="#c88a3c"/><rect x="174.3" y="66.7" width="4.9" height="4.9" fill="#8a8a8a"/><rect x="178.7" y="66.7" width="4.9" height="4.9" fill="#b07a3a"/><rect x="183.0" y="66.7" width="4.9" height="4.9" fill="#7a6a55"/><rect x="187.3" y="66.7" width="4.9" height="4.9" fill="#6f6f6f"/><rect x="191.7" y="66.7" width="4.9" height="4.9" fill="#9a5a2b"/><rect x="170.0" y="71.0" width="4.9" height="4.9" fill="#5c5c5c"/><rect x="174.3" y="71.0" width="4.9" height="4.9" fill="#c88a3c"/><rect x="178.7" y="71.0" width="4.9" height="4.9" fill="#8a8a8a"/><rect x="183.0" y="71.0" width="4.9" height="4.9" fill="#b07a3a"/><rect x="187.3" y="71.0" width="4.9" height="4.9" fill="#7a6a55"/><rect x="191.7" y="71.0" width="4.9" height="4.9" fill="#6f6f6f"/><rect x="170.0" y="75.3" width="4.9" height="4.9" fill="#9a5a2b"/><rect x="174.3" y="75.3" width="4.9" height="4.9" fill="#5c5c5c"/><rect x="178.7" y="75.3" width="4.9" height="4.9" fill="#c88a3c"/><rect x="183.0" y="75.3" width="4.9" height="4.9" fill="#8a8a8a"/><rect x="187.3" y="75.3" width="4.9" height="4.9" fill="#b07a3a"/><rect x="191.7" y="75.3" width="4.9" height="4.9" fill="#7a6a55"/><rect x="170.0" y="79.7" width="4.9" height="4.9" fill="#6f6f6f"/><rect x="174.3" y="79.7" width="4.9" height="4.9" fill="#9a5a2b"/><rect x="178.7" y="79.7" width="4.9" height="4.9" fill="#5c5c5c"/><rect x="183.0" y="79.7" width="4.9" height="4.9" fill="#c88a3c"/><rect x="187.3" y="79.7" width="4.9" height="4.9" fill="#8a8a8a"/><rect x="191.7" y="79.7" width="4.9" height="4.9" fill="#b07a3a"/></g>
+    <path d="M204 58 l8 -6 M206 70 l9 -2 M202 46 l6 -8" stroke="#cd8e3f"
+          stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <path d="M110 122 q10 6 20 -1" stroke="var(--nose)" stroke-width="2.6"
+        fill="none" stroke-linecap="round"/>
+</svg>
+</div>
+  <div class="tx"><span class="num">XI</span><h3>Secure isn't the same as scared.</h3><p>Guard everything. Flip off the fear.</p></div>
+</li>
+<li class="cmd rebel">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango-moon">
+  <ellipse class="sclo" cx="100" cy="242" rx="17" ry="9"/>
+  <ellipse class="sclo" cx="142" cy="242" rx="17" ry="9"/>
+  <path class="sc" d="M150 152 C178 122 178 78 160 60 C151 51 138 54 136 67
+    C151 68 157 86 153 106 C149 130 141 146 133 158 Z"/>
+  <path d="M160 76 q6 14 0 30" class="stroke" stroke-width="3"/>
+  <path d="M167 94 q4 12 -2 26" class="stroke" stroke-width="3"/>
+  <ellipse class="sc" cx="118" cy="168" rx="60" ry="72"/>
+  <g id="back-scales">
+    <path class="schi stroke" d="M70 116 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M66 138 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+    <path class="schi stroke" d="M64 160 a15 12 0 0 1 30 0 a15 12 0 0 1 30 0"/>
+  </g>
+  <ellipse class="sc" cx="101" cy="212" rx="23" ry="21"/>
+  <ellipse class="sc" cx="139" cy="212" rx="23" ry="21"/>
+  <g class="censor"><rect x="92.0" y="196.0" width="8.6" height="7.4" fill="#b07a3a"/><rect x="100.0" y="196.0" width="8.6" height="7.4" fill="#7a6a55"/><rect x="108.0" y="196.0" width="8.6" height="7.4" fill="#6f6f6f"/><rect x="116.0" y="196.0" width="8.6" height="7.4" fill="#9a5a2b"/><rect x="124.0" y="196.0" width="8.6" height="7.4" fill="#5c5c5c"/><rect x="132.0" y="196.0" width="8.6" height="7.4" fill="#c88a3c"/><rect x="140.0" y="196.0" width="8.6" height="7.4" fill="#8a8a8a"/><rect x="92.0" y="202.8" width="8.6" height="7.4" fill="#b07a3a"/><rect x="100.0" y="202.8" width="8.6" height="7.4" fill="#7a6a55"/><rect x="108.0" y="202.8" width="8.6" height="7.4" fill="#6f6f6f"/><rect x="116.0" y="202.8" width="8.6" height="7.4" fill="#9a5a2b"/><rect x="124.0" y="202.8" width="8.6" height="7.4" fill="#5c5c5c"/><rect x="132.0" y="202.8" width="8.6" height="7.4" fill="#c88a3c"/><rect x="140.0" y="202.8" width="8.6" height="7.4" fill="#8a8a8a"/><rect x="92.0" y="209.6" width="8.6" height="7.4" fill="#b07a3a"/><rect x="100.0" y="209.6" width="8.6" height="7.4" fill="#7a6a55"/><rect x="108.0" y="209.6" width="8.6" height="7.4" fill="#6f6f6f"/><rect x="116.0" y="209.6" width="8.6" height="7.4" fill="#9a5a2b"/><rect x="124.0" y="209.6" width="8.6" height="7.4" fill="#5c5c5c"/><rect x="132.0" y="209.6" width="8.6" height="7.4" fill="#c88a3c"/><rect x="140.0" y="209.6" width="8.6" height="7.4" fill="#8a8a8a"/><rect x="92.0" y="216.4" width="8.6" height="7.4" fill="#b07a3a"/><rect x="100.0" y="216.4" width="8.6" height="7.4" fill="#7a6a55"/><rect x="108.0" y="216.4" width="8.6" height="7.4" fill="#6f6f6f"/><rect x="116.0" y="216.4" width="8.6" height="7.4" fill="#9a5a2b"/><rect x="124.0" y="216.4" width="8.6" height="7.4" fill="#5c5c5c"/><rect x="132.0" y="216.4" width="8.6" height="7.4" fill="#c88a3c"/><rect x="140.0" y="216.4" width="8.6" height="7.4" fill="#8a8a8a"/><rect x="92.0" y="223.2" width="8.6" height="7.4" fill="#b07a3a"/><rect x="100.0" y="223.2" width="8.6" height="7.4" fill="#7a6a55"/><rect x="108.0" y="223.2" width="8.6" height="7.4" fill="#6f6f6f"/><rect x="116.0" y="223.2" width="8.6" height="7.4" fill="#9a5a2b"/><rect x="124.0" y="223.2" width="8.6" height="7.4" fill="#5c5c5c"/><rect x="132.0" y="223.2" width="8.6" height="7.4" fill="#c88a3c"/><rect x="140.0" y="223.2" width="8.6" height="7.4" fill="#8a8a8a"/></g>
+  <g id="peek-head">
+    <ellipse class="sc" cx="84" cy="84" rx="33" ry="31"/>
+    <ellipse class="belly" cx="78" cy="92" rx="19" ry="17"/>
+    <ellipse class="eyew" cx="72" cy="86" rx="10" ry="11"/>
+    <circle class="ink" cx="68" cy="88" r="5.5"/>
+    <circle cx="66" cy="85" r="1.8" fill="#fff"/>
+    <ellipse class="sc" cx="64" cy="102" rx="11" ry="8"/>
+    <ellipse cx="62" cy="101" rx="6" ry="4.5" fill="var(--nose)"/>
+    <path d="M58 108 q7 6 13 1" stroke="var(--nose)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path class="schi stroke" d="M58 64 a9 9 0 0 1 18 0 a9 9 0 0 1 18 0 a9 9 0 0 1 18 0"/>
+  </g>
+</g>
+
+</svg>
+</div>
+  <div class="tx"><span class="num">XII</span><h3>Bare it all — except the secrets.</h3><p>Radical in the open, locked where it counts.</p></div>
+</li>
+<li class="cmd">
+  <div class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" width="100%" height="100%" role="img">
+<style>
+  svg{--scale:#cd8e3f;--scale-hi:#e6b877;--scale-lo:#9a5a2b;
+      --belly:#f1e6d1;--belly-lo:#e0cead;--ink:#33281c;
+      --eyew:#ffffff;--nose:#5a3a22;--claw:#f6efdd;--cheek:#e79b6a;}
+  .sc{fill:var(--scale)} .schi{fill:var(--scale-hi)} .sclo{fill:var(--scale-lo)}
+  .belly{fill:var(--belly)} .ink{fill:var(--ink)} .claw{fill:var(--claw)}
+  .eyew{fill:var(--eyew)}
+  .stroke{fill:none;stroke:var(--scale-lo);stroke-width:2.5;
+          stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+
+<g id="pango">
+  <!-- tail: scaly curl sweeping to viewer-right -->
+  <g id="tail">
+    <path class="sc" d="M150 205 C196 205 214 168 206 132 C201 108 181 96 168 104
+      C182 112 188 132 184 150 C179 172 163 184 140 184 Z"/>
+    <path d="M181 118 q10 14 5 30" class="stroke" stroke-width="3"/>
+    <path d="M190 132 q7 12 3 26" class="stroke" stroke-width="3"/>
+    <path d="M197 150 q3 10 -1 20" class="stroke" stroke-width="3"/>
+  </g>
+  <!-- feet -->
+  <ellipse class="sclo" cx="100" cy="240" rx="18" ry="10"/>
+  <ellipse class="sclo" cx="142" cy="240" rx="18" ry="10"/>
+  <!-- body + belly -->
+  <ellipse class="sc" cx="120" cy="168" rx="62" ry="74"/>
+  <ellipse class="belly" cx="120" cy="176" rx="42" ry="58"/>
+  <!-- head + face patch -->
+  <ellipse class="sc" cx="120" cy="88" rx="44" ry="41"/>
+  <ellipse class="belly" cx="120" cy="98" rx="30" ry="27"/>
+  <!-- scale rows (crown + shoulders) -->
+  <g id="scales">
+    <path class="schi stroke" d="M86 66 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0 a10 10 0 0 1 20 0"/>
+    <path class="schi stroke" d="M78 82 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0 a11 11 0 0 1 22 0"/>
+    <path class="schi stroke" d="M64 128 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0 a13 12 0 0 1 26 0"/>
+    <path class="schi stroke" d="M60 150 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0 a14 12 0 0 1 28 0"/>
+  </g>
+  <!-- arms + claws -->
+  <g id="arm-left">
+    <ellipse class="sc" cx="70" cy="172" rx="16" ry="20" transform="rotate(18 70 172)"/>
+    <g class="claw"><path d="M60 188 q-4 8 0 14 q4 -3 6 -12 Z"/>
+      <path d="M68 192 q-3 9 1 15 q4 -4 5 -13 Z"/>
+      <path d="M77 192 q-1 9 4 14 q3 -5 2 -14 Z"/></g>
+  </g>
+  <g id="arm-right">
+    <ellipse class="sc" cx="170" cy="172" rx="16" ry="20" transform="rotate(-18 170 172)"/>
+    <g class="claw"><path d="M180 188 q4 8 0 14 q-4 -3 -6 -12 Z"/>
+      <path d="M172 192 q3 9 -1 15 q-4 -4 -5 -13 Z"/>
+      <path d="M163 192 q1 9 -4 14 q-3 -5 -2 -14 Z"/></g>
+  </g>
+  <!-- face -->
+  <g id="face">
+    <ellipse class="eyew" cx="105" cy="92" rx="12" ry="13"/>
+    <ellipse class="eyew" cx="135" cy="92" rx="12" ry="13"/>
+    <circle class="ink" cx="107" cy="94" r="6.5"/>
+    <circle class="ink" cx="133" cy="94" r="6.5"/>
+    <circle cx="104.5" cy="91" r="2.2" fill="#fff"/>
+    <circle cx="130.5" cy="91" r="2.2" fill="#fff"/>
+    <ellipse cx="90" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse cx="150" cy="108" rx="7" ry="4.5" fill="var(--cheek)" opacity=".55"/>
+    <ellipse class="sc" cx="120" cy="112" rx="15" ry="11"/>
+    <ellipse cx="120" cy="110" rx="9" ry="6.5" fill="var(--nose)"/>
+    <path d="M112 122 q8 8 16 0" fill="none" stroke="var(--nose)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</g>
+
+
+  <g id="c-jacket">
+    <path d="M120 126 L152 140 L152 210 Q120 218 88 210 L88 140 Z" fill="#2f4a6b"/>
+    <path d="M120 126 L100 138 L120 180 Z" fill="#e9e2d0"/>
+    <path d="M120 126 L140 138 L120 180 Z" fill="#e9e2d0"/>
+    <path d="M120 150 L120 208" stroke="#c9a24a" stroke-width="3"/>
+    <rect x="86" y="132" width="18" height="10" rx="4" fill="#c9a24a"/>
+    <rect x="136" y="132" width="18" height="10" rx="4" fill="#c9a24a"/>
+    <rect x="84" y="200" width="12" height="12" rx="4" fill="#c9a24a"/>
+    <rect x="144" y="200" width="12" height="12" rx="4" fill="#c9a24a"/>
+    <path d="M132 150 h14 v14 h-14 Z" fill="#c9a24a"/>
+    <text x="139" y="161" font-family="Arial" font-weight="bold" font-size="11" fill="#2f4a6b" text-anchor="middle">P</text>
+  </g>
+</svg>
+</div>
+  <div class="tx"><span class="num">XIII</span><h3>Leave the burrow braver.</h3><p>The whole point is to share the thing. Go.</p></div>
+</li>
+</ol>
+<footer>Pango is the mascot of <a href="https://github.com/SmartTasksOrg/smartpangolin">SmartPangolin</a>. · Icons in <code>brand/svg/</code> · Apache-2.0</footer>
+</div></body></html>

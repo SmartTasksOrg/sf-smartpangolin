@@ -1,0 +1,47 @@
+{
+  "name": "pangolin-check",
+  "version": "1.0.0",
+  "description": "Native Node/CI port of SmartPangolin: scan a tree for secrets in filenames & content and honour .gitignore before sharing code externally or with an LLM. Zero dependencies.",
+  "bin": {
+    "pangolin-check": "bin/cli.js"
+  },
+  "main": "lib/scanner.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test/conformance.test.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "Apache-2.0",
+  "author": "SmartTasks Lab (Roen Branham, Le Thanh)",
+  "homepage": "https://github.com/SmartTasksOrg/smartpangolin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SmartTasksOrg/smartpangolin.git",
+    "directory": "ports/node"
+  },
+  "bugs": {
+    "url": "https://github.com/SmartTasksOrg/smartpangolin/issues"
+  },
+  "keywords": [
+    "security",
+    "secrets",
+    "secret-scanner",
+    "gitignore",
+    "ci",
+    "pre-publish",
+    "llm",
+    "smartpangolin",
+    "pangolin"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

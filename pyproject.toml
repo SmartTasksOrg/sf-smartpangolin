@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "smartpangolin"
+dynamic = ["version"]
+description = "Deterministic, fail-closed, auditable secret-scrubbing packager for sharing code and data with LLMs and third parties."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "Roen Branham"}, {name = "Le Thanh"}]
+keywords = [
+    "secrets", "security", "redaction", "share", "llm", "context",
+    "sbom", "provenance", "deterministic", "supply-chain", "pre-commit",
+    "smarttasks", "iaiso",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Utilities",
+]
+# Runtime: zero third-party dependencies. Standard library only, by design.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "build>=1.0",
+    "twine>=5.0",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/SmartTasksOrg/smartpangolin"
+Documentation = "https://github.com/SmartTasksOrg/smartpangolin/tree/main/docs"
+Repository = "https://github.com/SmartTasksOrg/smartpangolin"
+Issues = "https://github.com/SmartTasksOrg/smartpangolin/issues"
+"SmartTasks (data fabric)" = "https://smarttasks.cloud"
+"IAIso (control framework)" = "https://iaiso.org"
+"Model repacks (Hugging Face)" = "https://huggingface.co/smarttasks"
+
+[project.scripts]
+pango = "smartpangolin.cli:main"
+smartpangolin-mcp = "smartpangolin.mcp:main"
+
+[tool.hatch.version]
+path = "src/smartpangolin/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/smartpangolin"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/smartpangolin",
+    "docs",
+    "examples",
+    "adapters",
+    "tests",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"

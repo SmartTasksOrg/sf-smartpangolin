@@ -1,0 +1,12 @@
+# .github/workflows/pangolin.yml — fail the PR if a secret would be shared.
+name: SmartPangolin guard
+on: [push, pull_request]
+jobs:
+  pangolin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.x" }
+      - run: pip install smartpangolin
+      - run: pango pack --dry-run --share public --root .

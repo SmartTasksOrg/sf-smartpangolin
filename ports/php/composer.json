@@ -1,0 +1,35 @@
+{
+  "name": "smarttasks/pangolin-check",
+  "description": "Native PHP port of SmartPangolin: scan a tree for secrets in filenames & content and honour .gitignore before sharing code externally or with an LLM. No dependencies.",
+  "type": "library",
+  "keywords": [
+    "security",
+    "secrets",
+    "secret-scanner",
+    "gitignore",
+    "ci",
+    "llm",
+    "smartpangolin",
+    "pangolin"
+  ],
+  "homepage": "https://github.com/SmartTasksOrg/smartpangolin",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Roen Branham"
+    },
+    {
+      "name": "Le Thanh"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "bin": [
+    "pangolin-check.php"
+  ],
+  "support": {
+    "issues": "https://github.com/SmartTasksOrg/smartpangolin/issues",
+    "source": "https://github.com/SmartTasksOrg/smartpangolin/tree/main/ports/php"
+  }
+}

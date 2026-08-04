@@ -1,0 +1,9 @@
+{
+  "share_mode": "public",
+  "allow": [
+    "README.md",
+    "docs/policy.md",
+    "src/smartpangolin/engine.py",
+    "tests/test_pangolin.py"
+  ]
+}

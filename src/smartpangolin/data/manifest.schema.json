@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smarttasks.cloud/schemas/smartpangolin.share_manifest/v1.json",
+  "title": "SmartPangolin share manifest",
+  "type": "object",
+  "required": ["schema", "share_mode", "policy_sha256", "content_sha256", "file_count", "files"],
+  "properties": {
+    "schema": { "const": "smartpangolin.share_manifest/v1" },
+    "legacy_schema": { "type": "string" },
+    "generated_utc": { "type": "string", "format": "date-time" },
+    "share_mode": { "enum": ["public", "private"] },
+    "policy_version": { "type": "string" },
+    "policy_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "content_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "tool_version": { "type": "string" },
+    "source_root": { "type": "string" },
+    "focus": { "type": ["string", "null"] },
+    "selection": { "type": "string" },
+    "file_count": { "type": "integer", "minimum": 0 },
+    "total_bytes": { "type": "integer", "minimum": 0 },
+    "excluded_count": { "type": "integer", "minimum": 0 },
+    "overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "overrode_rule"],
+        "properties": {
+          "path": { "type": "string" },
+          "overrode_rule": { "type": "string" }
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "size", "sha256"],
+        "properties": {
+          "path": { "type": "string" },
+          "size": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "merged": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "shard_count": { "type": "integer", "minimum": 0 },
+        "max_chars": { "type": ["integer", "null"] },
+        "raw_files_included": { "type": "boolean" },
+        "shards": { "type": "array" }
+      }
+    },
+    "git": {
+      "type": "object",
+      "properties": {
+        "tracked_count": { "type": "integer" },
+        "tracked_not_shipped": { "type": "array", "items": { "type": "string" } },
+        "shipped_not_tracked": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

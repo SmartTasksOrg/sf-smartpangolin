@@ -1,0 +1,31 @@
+name: "SmartPangolin guard"
+description: "Fail a PR if a tracked source file would leak a secret in a public share."
+branding:
+  icon: "shield"
+  color: "blue"
+inputs:
+  root:
+    description: "Project root to scan"
+    default: "."
+  share:
+    description: "Share mode: public or private"
+    default: "public"
+  version:
+    description: "SmartPangolin version to install"
+    default: "pango"
+runs:
+  using: "composite"
+  steps:
+    - name: Install SmartPangolin
+      shell: bash
+      run: pip install "${{ inputs.version }}"
+    - name: Dry-run seal (fails on any SEC-* hit in tracked files)
+      shell: bash
+      run: |
+        pango pack --root "${{ inputs.root }}" --share "${{ inputs.share }}" \
+          --dry-run --debug --zip-name pr-guard.zip | tee seal.log
+        # Turn any credential-class exclusion of a *tracked* file into a failure.
+        if grep -Eq '\[drop\].*<- SEC-(PATH|CONT|DIR)' seal.log; then
+          echo "::error::SmartPangolin found a secret-class file in the tree. Move it under .secret/ or clear it."
+          exit 1
+        fi

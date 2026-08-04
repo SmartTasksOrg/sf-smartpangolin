@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartPangolin — scrub secrets before your code leaves the burrow</title>
+<meta name="description" content="Deterministic, fail-closed, auditable secret-scrubbing packager. Prepare code and data for sharing with an LLM or a third party — and prove exactly what left the boundary.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burrow:#1b1e17;      /* dark warm olive — the burrow */
+    --burrow-2:#242820;
+    --parchment:#ece4d2;   /* text on dark / light sections */
+    --parchment-dim:#c9c2b2;
+    --keratin:#cd8e3f;     /* scale bronze — the accent */
+    --keratin-lo:#a9662e;  /* clay */
+    --keratin-hi:#e8b877;
+    --sage:#8fa46d;        /* the single 'verified' signal */
+    --ink:#22251c;         /* text on parchment */
+    --muted:#6d7061;
+    --line:rgba(236,228,210,.14);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'IBM Plex Sans',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--burrow);color:var(--parchment);
+    font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  /* ---------- top bar ---------- */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);
+    background:rgba(27,30,23,.72);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);
+    font-weight:600;letter-spacing:-.01em;font-size:1.06rem}
+  .brand .glyph{width:26px;height:26px;flex:none}
+  .navlinks{display:flex;gap:26px;align-items:center;font-size:.92rem}
+  .navlinks a{color:var(--parchment-dim);text-decoration:none;transition:color .2s}
+  .navlinks a:hover{color:var(--keratin-hi)}
+  .ghbtn{border:1px solid var(--line);border-radius:8px;padding:7px 14px;
+    color:var(--parchment)!important;transition:border-color .2s,background .2s}
+  .ghbtn:hover{border-color:var(--keratin);background:rgba(205,142,63,.1)}
+  @media(max-width:720px){.navlinks .hidesm{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;display:grid;grid-template-columns:1.05fr .95fr;
+    gap:40px;align-items:center;padding:78px 0 70px}
+  @media(max-width:860px){.hero{grid-template-columns:1fr;padding:52px 0 44px}}
+  .eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--keratin);margin-bottom:20px}
+  h1{font-family:var(--display);font-weight:700;letter-spacing:-.028em;
+    font-size:clamp(2.7rem,6vw,4.15rem);line-height:.98;margin-bottom:18px}
+  h1 .b{color:var(--keratin-hi)}
+  .lede{font-size:1.14rem;color:var(--parchment-dim);max-width:38ch;margin-bottom:14px}
+  .sub{font-size:.98rem;color:var(--muted);max-width:44ch;margin-bottom:30px}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .install{display:inline-flex;align-items:center;gap:12px;background:var(--burrow-2);
+    border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--mono);
+    font-size:.95rem;cursor:pointer;transition:border-color .2s}
+  .install:hover{border-color:var(--keratin)}
+  .install .dollar{color:var(--keratin)}
+  .install .cmd{color:var(--parchment)}
+  .install .copy{margin-left:2px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);border-left:1px solid var(--line);padding-left:12px}
+  .install.copied .copy{color:var(--sage)}
+  .primary{display:inline-flex;align-items:center;gap:9px;background:var(--keratin);
+    color:#221605;font-weight:600;border-radius:10px;padding:13px 20px;text-decoration:none;
+    font-family:var(--display);transition:transform .15s,background .2s}
+  .primary:hover{background:var(--keratin-hi);transform:translateY(-1px)}
+
+  /* ---------- the armored back (signature) ---------- */
+  .armor{position:relative;width:min(420px,84vw);aspect-ratio:1/1;justify-self:center;overflow:visible}
+  .armor-stage{position:absolute;top:0;left:0;width:420px;height:420px;
+    transform-origin:top left;transform:scale(var(--k,1))}
+  .armor-shape{position:absolute;inset:0;
+    clip-path:path('M210 8 C300 8 388 74 400 190 C410 290 350 400 210 412 C70 400 10 290 20 190 C32 74 120 8 210 8 Z')}
+  .scales{position:absolute;inset:0}
+  .scale{position:absolute;width:var(--sw);height:var(--sh);
+    background:linear-gradient(160deg,var(--keratin-hi),var(--keratin) 42%,var(--keratin-lo));
+    border-radius:48% 48% 46% 46%/62% 62% 38% 38%;
+    box-shadow:inset 0 -3px 6px rgba(90,40,10,.45),inset 0 2px 3px rgba(255,220,170,.35),
+      0 3px 5px rgba(0,0,0,.28);
+    transform:translate(var(--x),var(--y)) scale(var(--s,1));
+    transition:transform .3s cubic-bezier(.2,.8,.2,1),filter .3s;
+    will-change:transform}
+  .scale::after{content:"";position:absolute;left:50%;top:26%;transform:translateX(-50%);
+    width:2px;height:52%;border-radius:2px;background:rgba(90,40,10,.28)}
+  .scale:hover{transform:translate(var(--x),calc(var(--y) - 7px)) scale(1.06);
+    filter:brightness(1.12);z-index:3}
+  .armor-ring{position:absolute;inset:-6% ;border-radius:50%;
+    background:radial-gradient(circle at 50% 40%,rgba(205,142,63,.16),transparent 62%);
+    filter:blur(6px);z-index:-1}
+  .armor-cap{position:absolute;left:50%;top:15%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:.72rem;color:var(--burrow);background:var(--keratin-hi);
+    padding:3px 9px;border-radius:20px;letter-spacing:.04em;opacity:.9}
+  @media(max-width:860px){.armor{max-width:320px;margin-top:8px}}
+
+  /* ---------- sections ---------- */
+  section{padding:64px 0}
+  .sec-label{font-family:var(--mono);font-size:.78rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--keratin);margin-bottom:14px}
+  h2{font-family:var(--display);font-weight:600;letter-spacing:-.02em;
+    font-size:clamp(1.7rem,3.4vw,2.3rem);line-height:1.08;margin-bottom:16px}
+  .two-step{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px}
+  @media(max-width:760px){.two-step{grid-template-columns:1fr}}
+  .step{background:var(--burrow-2);border:1px solid var(--line);border-radius:14px;
+    padding:26px 26px 28px;position:relative;overflow:hidden}
+  .step .n{font-family:var(--mono);color:var(--keratin);font-size:.82rem;letter-spacing:.1em}
+  .step h3{font-family:var(--display);font-weight:600;font-size:1.24rem;margin:8px 0 8px}
+  .step p{color:var(--parchment-dim);font-size:.98rem}
+  .step .verb{color:var(--keratin-hi)}
+
+  /* comparison */
+  .compare{background:var(--parchment);color:var(--ink)}
+  .compare .sec-label{color:var(--keratin-lo)}
+  .ctable{margin-top:26px;border:1px solid rgba(34,37,28,.14);border-radius:14px;overflow:hidden}
+  .crow{display:grid;grid-template-columns:1.1fr 1fr 1fr;border-top:1px solid rgba(34,37,28,.1)}
+  .crow:first-child{border-top:none}
+  .crow>div{padding:15px 18px;font-size:.95rem}
+  .crow .h{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted)}
+  .crow .head{background:rgba(34,37,28,.04);font-weight:600}
+  .crow .mine{background:rgba(205,142,63,.09);font-weight:500}
+  .crow .mine b{color:var(--keratin-lo)}
+  @media(max-width:680px){.crow{grid-template-columns:1fr}.crow .h{display:none}
+    .crow>div{border-top:1px solid rgba(34,37,28,.08)}}
+
+  /* proof */
+  .proof-card{margin-top:28px;background:#14170f;border:1px solid var(--line);
+    border-radius:14px;font-family:var(--mono);font-size:.86rem;overflow:hidden}
+  .proof-top{display:flex;gap:8px;padding:13px 16px;border-bottom:1px solid var(--line)}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .proof-body{padding:18px 18px 20px;line-height:1.85;overflow-x:auto;white-space:nowrap}
+  .proof-body .k{color:var(--keratin)}
+  .proof-body .p{color:var(--parchment-dim)}
+  .proof-body .ok{color:var(--sage);font-weight:600}
+  .proof-body .drop{color:#d98b6a}
+
+  /* ecosystem */
+  .eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+  @media(max-width:760px){.eco-grid{grid-template-columns:1fr}}
+  .eco{display:block;text-decoration:none;background:var(--burrow-2);border:1px solid var(--line);
+    border-radius:14px;padding:22px;transition:border-color .2s,transform .15s}
+  .eco:hover{border-color:var(--keratin);transform:translateY(-2px)}
+  .eco .name{font-family:var(--display);font-weight:600;font-size:1.1rem;margin-bottom:5px}
+  .eco .dom{font-family:var(--mono);font-size:.76rem;color:var(--keratin);margin-bottom:10px}
+  .eco p{color:var(--parchment-dim);font-size:.92rem}
+
+  /* final cta */
+  .final{text-align:center;padding:76px 0}
+  .final h2{margin-bottom:22px}
+  .final .cta-row{justify-content:center}
+
+  footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--muted);font-size:.88rem}
+  .foot{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+  .foot a{color:var(--parchment-dim);text-decoration:none}
+  .foot a:hover{color:var(--keratin-hi)}
+  .foot .lic{font-family:var(--mono);font-size:.8rem}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M16 3C23 3 29 9 29 17c0 7-6 12-13 12S3 24 3 17C3 9 9 3 16 3Z" fill="#cd8e3f" opacity=".18"/>
+        <path d="M16 6c2.6 0 4.8 2 5 4.7-1.3-1-3-1.7-5-1.7s-3.7.6-5 1.7C6.2 8 8.4 6 11 6" fill="#e8b877"/>
+        <path d="M9 13c1.6-1.1 4.2-1.8 7-1.8s5.4.7 7 1.8c-1.4 1-3.9 1.7-7 1.7s-5.6-.7-7-1.7Z" fill="#cd8e3f"/>
+        <path d="M8 18c1.8-1.1 4.6-1.8 8-1.8s6.2.7 8 1.8c-1.6 1.1-4.4 1.9-8 1.9s-6.4-.8-8-1.9Z" fill="#b6752f"/>
+        <path d="M9 23c1.6-1 4-1.6 7-1.6s5.4.6 7 1.6c-1.5 1.3-4.1 2.3-7 2.3S10.5 24.3 9 23Z" fill="#a9662e"/>
+      </svg>
+      SmartPangolin
+    </div>
+    <nav class="navlinks">
+      <a class="hidesm" href="#how">How it works</a>
+      <a class="hidesm" href="#different">Why different</a>
+      <a class="hidesm" href="#ecosystem">Ecosystem</a>
+      <a class="hidesm" href="manifesto.html">The Code</a>
+      <a class="ghbtn" href="https://github.com/SmartTasksOrg/smartpangolin">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="padding-top:78px">
+    <div>
+      <div class="eyebrow">forage · seal · prove</div>
+      <h1>Scrub the secrets<br>before your code<br>leaves the <span class="b">burrow</span>.</h1>
+      <p class="lede">SmartPangolin packages a repo for sharing with an LLM or a third party — and proves exactly what left the boundary.</p>
+      <p class="sub">Deterministic. Fail-closed. Stdlib-only. Every share ships with a hash-signed manifest and an audit of everything held back, and why.</p>
+      <div class="cta-row">
+        <div class="install" id="install" title="Copy">
+          <span class="dollar">$</span><span class="cmd">pip install smartpangolin</span><span class="copy" id="copytxt">Copy</span>
+        </div>
+        <a class="primary" href="https://github.com/SmartTasksOrg/smartpangolin">View the repo →</a>
+      </div>
+    </div>
+
+    <!-- signature: the armored back -->
+    <div class="armor" aria-hidden="true">
+      <div class="armor-stage" id="armorStage">
+        <div class="armor-ring"></div>
+        <div class="armor-shape">
+          <div class="scales" id="scales"></div>
+        </div>
+        <div class="armor-cap">content_sha256 ✓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how">
+    <div class="sec-label">What it does</div>
+    <h2>Two instincts, one pass.</h2>
+    <p style="color:var(--parchment-dim);max-width:52ch">A pangolin forages out the smallest hidden things, then rolls into a shell nothing gets through. The tool does both to your repo, in a single run.</p>
+    <div class="two-step">
+      <div class="step reveal">
+        <div class="n">01 · forage</div>
+        <h3>Find what shouldn't ship</h3>
+        <p>Anchored rules hunt out credential files, inline tokens, and local-infrastructure disclosure. On a hit it <span class="verb">excludes the whole file</span> — never a half-redaction a secret can survive — and records the rule, offset, and length. Never the value.</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">02 · seal</div>
+        <h3>Prove what did</h3>
+        <p>What remains is <span class="verb">sealed into an artifact</span> with a manifest, an exclusion audit, the exact policy that ran, and two hashes: one for the payload, one for the bytes. Pin the clock and the zip is reproducible to the byte.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENT -->
+  <section class="different compare">
+   <div class="wrap" style="padding:0">
+    <div class="sec-label">Why it's not just a scanner</div>
+    <h2>A scanner flags a line. SmartPangolin ships an artifact.</h2>
+    <div class="ctable">
+      <div class="crow">
+        <div class="h head"></div><div class="h head">Typical secret scanner</div><div class="h head">SmartPangolin</div>
+      </div>
+      <div class="crow">
+        <div class="h">On a hit</div><div>flags a line</div><div class="mine"><b>excludes the whole file</b>, records the rule</div>
+      </div>
+      <div class="crow">
+        <div class="h">Unreadable / binary / oversized</div><div>skipped, assumed fine</div><div class="mine"><b>excluded fail-closed</b></div>
+      </div>
+      <div class="crow">
+        <div class="h">Output</div><div>a report to read</div><div class="mine">a <b>shareable zip</b> + manifest + exclusions + policy + ledger</div>
+      </div>
+      <div class="crow">
+        <div class="h">Two runs, same tree</div><div>may differ</div><div class="mine"><b>identical content hash</b>; byte-identical zip when pinned</div>
+      </div>
+      <div class="crow">
+        <div class="h">Overrides</div><div>config drift</div><div class="mine">fold into the <b>policy fingerprint</b> — no silent bypass</div>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- PROOF -->
+  <section id="proof">
+    <div class="sec-label">Ship the evidence with the artifact</div>
+    <h2>Every share is auditable by design.</h2>
+    <p style="color:var(--parchment-dim);max-width:54ch">The matched secret is never written anywhere — only its rule, offset, and length — so the audit record itself is safe to share.</p>
+    <div class="proof-card reveal">
+      <div class="proof-top">
+        <span class="dot" style="background:#d98b6a"></span>
+        <span class="dot" style="background:var(--keratin)"></span>
+        <span class="dot" style="background:var(--sage)"></span>
+      </div>
+      <div class="proof-body">
+<span class="p">$</span> <span class="k">pango pack --root . --share public</span><br>
+<span class="p">  included   : 47 files (146.6 KiB)</span><br>
+<span class="p">  excluded   : 3 files</span><br>
+<span class="drop">  [drop] .env            &lt;- SEC-PATH-ENV</span><br>
+<span class="drop">  [drop] src/server.py   &lt;- LOC-RFC1918</span><br>
+<span class="drop">  [drop] deploy/prod.key &lt;- SEC-PATH-KEY</span><br>
+<span class="p">  content_sha256 : 8f3a…c012   policy : 2026-07-25.2</span><br>
+<br>
+<span class="p">$</span> <span class="k">pango verify share.zip</span><br>
+<span class="ok">  VERIFY OK — sidecar MATCH · content MATCH · 47/47 hashes MATCH</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM -->
+  <section id="ecosystem">
+    <div class="sec-label">Part of the SmartTasks lab</div>
+    <h2>Ship source the way a good model ships weights.</h2>
+    <p style="color:var(--parchment-dim);max-width:56ch">A model card carries a hash so you can trust what you load. SmartPangolin makes your source travel the same way — with a manifest, an audit, and a policy fingerprint.</p>
+    <div class="eco-grid">
+      <a class="eco reveal" href="https://smarttasks.cloud">
+        <div class="name">SmartTasks</div>
+        <div class="dom">smarttasks.cloud</div>
+        <p>The data-fabric app whose internal sharing pipeline this tool was extracted and hardened from.</p>
+      </a>
+      <a class="eco reveal" href="https://iaiso.org">
+        <div class="name">IAIso</div>
+        <div class="dom">iaiso.org</div>
+        <p>Pressure-based control of systems. A seal is judged by whether it holds under pressure — the same principle, fail-closed.</p>
+      </a>
+      <a class="eco reveal" href="https://huggingface.co/smarttasks">
+        <div class="name">Model repacks</div>
+        <div class="dom">huggingface.co/smarttasks</div>
+        <p>GGUF builds published with scorecards, metrics, and hashes — so a system can authenticate what it loads.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- MANIFESTO TEASER -->
+  <section id="code" style="border-top:1px solid var(--line)">
+    <div class="sec-label">Stay curled. Stay dangerous.</div>
+    <h2>Secure isn't the same as scared.</h2>
+    <p style="color:var(--parchment-dim);max-width:54ch">Forage in the open, curl into armor where it counts. Thirteen commandments for shipping bravely and staying sealed.</p>
+    <p style="margin-top:22px"><a class="primary" href="manifesto.html" style="text-decoration:none">Read The Pangolin Code →</a></p>
+  </section>
+
+  <!-- FINAL -->
+  <section class="final">
+    <h2>Point it at a repo. Get back something safe to send.</h2>
+    <div class="cta-row">
+      <div class="install" id="install2" title="Copy">
+        <span class="dollar">$</span><span class="cmd">pip install smartpangolin</span><span class="copy">Copy</span>
+      </div>
+      <a class="primary" href="https://github.com/SmartTasksOrg/smartpangolin">Open on GitHub →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand" style="font-size:.98rem">SmartPangolin</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <a href="https://github.com/SmartTasksOrg/smartpangolin">GitHub</a>
+      <a href="https://pypi.org/project/smartpangolin/">PyPI</a>
+      <a href="https://github.com/SmartTasksOrg/smartpangolin/tree/main/docs">Docs</a>
+      <a href="https://smarttasks.cloud">SmartTasks</a>
+    </div>
+    <div class="lic">Apache-2.0</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Build the armored back out of overlapping scales, shaded to fake a curved surface.
+  var host = document.getElementById('scales');
+  if(host){
+    var rows = 7, cols = 6, sw = 62, sh = 74, ox = 58, oy = 40, cx = 210, cy = 210;
+    for(var r=0;r<rows;r++){
+      var y = 40 + r*oy;
+      var shift = (r%2)? ox/2 : 0;
+      for(var c=0;c<cols;c++){
+        var x = 34 + shift + c*ox;
+        var dx = (x+sw/2)-cx, dy=(y+sh/2)-cy;
+        if(Math.sqrt(dx*dx/1.02 + dy*dy) > 196) continue; // clip to body
+        var s = document.createElement('div');
+        s.className='scale';
+        var depth = 1 - Math.min(1, Math.sqrt(dx*dx+dy*dy)/230); // center brighter
+        s.style.setProperty('--sw', sw+'px');
+        s.style.setProperty('--sh', sh+'px');
+        s.style.setProperty('--x', x+'px');
+        s.style.setProperty('--y', y+'px');
+        s.style.setProperty('--s', (0.9+depth*0.16).toFixed(3));
+        s.style.zIndex = r+1;
+        s.style.filter = 'brightness('+(0.82+depth*0.4).toFixed(2)+')';
+        host.appendChild(s);
+      }
+    }
+  }
+  // Copy-to-clipboard for install chips
+  function wire(el){
+    if(!el) return;
+    el.addEventListener('click', function(){
+      navigator.clipboard && navigator.clipboard.writeText('pip install smartpangolin');
+      el.classList.add('copied');
+      var t = el.querySelector('.copy'); if(t){var o=t.textContent; t.textContent='Copied ✓';
+        setTimeout(function(){t.textContent=o; el.classList.remove('copied');},1400);}
+    });
+  }
+  wire(document.getElementById('install'));
+  wire(document.getElementById('install2'));
+  // Scale the fixed-420 art stage to fit its responsive container
+  var stage = document.getElementById('armorStage');
+  function fit(){ if(!stage) return; var w = stage.parentElement.clientWidth;
+    stage.style.setProperty('--k',(w/420).toFixed(4)); }
+  fit(); window.addEventListener('resize', fit);
+  // Scroll reveal
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.16});
+    document.querySelectorAll('.reveal').forEach(function(n){io.observe(n)});
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(n){n.classList.add('in')});
+  }
+})();
+</script>
+</body>
+</html>
