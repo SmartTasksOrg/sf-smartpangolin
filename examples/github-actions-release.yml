@@ -1,0 +1,19 @@
+# Minimal example: build + publish SmartPangolin-sealed context on tag.
+# See adapters/github-action/action.yml for the reusable PR guard action.
+name: publish
+on:
+  push:
+    tags: ["v*"]
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install smartpangolin
+      - run: pango pack --root . --share public
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sealed-context
+          path: ../extracted_source/share_archive/*.zip

@@ -1,0 +1,21 @@
+{
+  "family": "Smart*",
+  "tool": "SmartPangolin",
+  "version": "3.0.0",
+  "iaiso_section": "\u00a71 \u00b7 Secure Sharing",
+  "share_mode": "public",
+  "cross_promote": [
+    "SmartPrompt",
+    "SmartCheck",
+    "SmartSeal",
+    "SmartStandard",
+    "SmartSim",
+    "SmartMoat",
+    "SmartRoute",
+    "SmartFeed"
+  ],
+  "links": {
+    "iaiso": "https://iaiso.org",
+    "cloud": "https://smarttasks.cloud"
+  }
+}

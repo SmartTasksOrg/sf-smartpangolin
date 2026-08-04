@@ -1,0 +1,5 @@
+pangolin:
+  image: python:3-slim
+  script:
+    - pip install smartpangolin
+    - pango pack --dry-run --share public --root .

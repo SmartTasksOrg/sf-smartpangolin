@@ -1,0 +1,6 @@
+# Copy into your repo as .pre-commit-config.yaml, then: pre-commit install
+repos:
+  - repo: https://github.com/smarttasks/smartpangolin
+    rev: v1.0.0
+    hooks:
+      - id: pangolin-guard

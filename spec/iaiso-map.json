@@ -1,0 +1,20 @@
+{
+  "tool": "SmartPangolin",
+  "package": "smartpangolin",
+  "version": "3.0.0",
+  "iaiso_section": "\u00a71 \u00b7 Secure Sharing",
+  "rule_prefix": "SEC-*",
+  "conforms_to": "https://github.com/SmartTasksOrg/IAIso",
+  "cloud": "https://smarttasks.cloud",
+  "stacks_with": [
+    "SmartSeal"
+  ],
+  "starter_kits": {
+    "Python": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/python",
+    "Node / TypeScript": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/node",
+    "Go": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/go",
+    "Java": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/java",
+    "PHP": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/php",
+    "Rust": "https://github.com/SmartTasksOrg/IAIso/tree/main/starter-kits/rust"
+  }
+}

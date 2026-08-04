@@ -1,0 +1,5 @@
+{
+  "exclude_dirs": ["fixtures", "vendor_snapshots"],
+  "exclude_exts": [".parquet", ".gguf"],
+  "exclude_filenames": ["local_settings.py"]
+}
