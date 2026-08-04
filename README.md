@@ -20,28 +20,32 @@ pip install smartpangolin
 smartpangolin --demo        # run against the bundled demo
 ```
 
-## Use it anywhere
+## Run it in your stack
 
-The whole family (and its **IAIso starter kits**) covers Python, Node / TypeScript, Go, Java, PHP, Rust:
-
-| You work in… | Do this |
+| Where you work | How you run it |
 |---|---|
 | **Python** | `pip install smartpangolin` |
-| **Node / TypeScript** | `npx smartpangolin-check .` |
-| **Go** | `go run github.com/SmartTasksOrg/smartpangolin/ports/go .` |
-| **Java** | `java -jar smartpangolin-check.jar .` |
-| **PHP** | `php ports/php/smartpangolin-check.php .` |
-| **Rust** | `cargo run -p smartpangolin-check .` |
-| **AI coding tools** (Cursor, Claude, Cline, Windsurf, Zed) | add the MCP server: `{ "command": "smartpangolin-mcp" }` |
-| **CI / pre-commit** | drop in `.pre-commit-hooks.yaml` |
+| **Go · Java · Node · PHP** | native ports in [`ports/`](ports/), each verified against the Python reference by [`ports/conformance/run.sh`](ports/conformance/run.sh) |
+| **LangChain · LlamaIndex · function-calling · MCP** | drop-in integration kits in [`kits/`](kits/) |
+| **AI coding tools** (Cursor, Claude, Cline, Windsurf, Zed) | MCP server: `smartpangolin-mcp` |
+| **CI / pre-commit** | add the hook from [`.pre-commit-hooks.yaml`](.pre-commit-hooks.yaml) |
 
-Starter kits for every language live in the **[IAIso repo](https://github.com/SmartTasksOrg/IAIso)** so you can
-adopt the whole standard in the stack you already use.
+## What's in this repo
+
+- **Core engine** — [`src/smartpangolin/`](src/smartpangolin/): scan() -> ScanResult. Deterministic, dependency-free.
+- **CLI** — `pango pack | verify | triage | tree | purge | policy | init`, the full fail-closed packager. `smartpangolin --demo` runs the quick demo; the family `scan()` API is the lightweight scanner.
+- **Language ports** — [`ports/`](ports/): native Go, Java, Node, PHP implementations that reproduce the Python reference, with a shared conformance harness.
+- **Integration kits** — [`kits/`](kits/): LangChain, LlamaIndex, function-calling, MCP, CI, and pre-commit starters.
+- **Adapters** — [`adapters/`](adapters/): GitHub Action and language adapters.
+- **Editor integration** — [`integrations/`](integrations/): VS Code integration.
+- **MCP server** — `smartpangolin-mcp`, for agentic/AI-coding clients.
+- **Reference docs** — [`docs/`](docs/): 10 documents (CLI, policy, design, FAQ, porting…).
+- **Also included** — a runnable [`demo/`](demo/), [`examples/`](examples/), the IAIso mapping [`spec/iaiso-map.json`](spec/iaiso-map.json), a browser [`site/playground.html`](site/playground.html), plus public smoke tests in `tests/`.
 
 ## How it works
 
 Rule IDs are namespaced `SEC-*` so output looks kin to the rest of the family
-(SmartPangolin's `SEC-*`, etc.). Deterministic, dependency-free, fail-loud.
+(SmartCheck's `CHECK-*`, SmartSeal's `SEAL-*`, etc.). Deterministic, dependency-free, fail-loud.
 
 ### The data objects (UML)
 
