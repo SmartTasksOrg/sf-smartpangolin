@@ -1,6 +1,6 @@
 """UML data objects for SmartPangolin — the diagram in the README is these classes."""
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 @dataclass
 class Finding:

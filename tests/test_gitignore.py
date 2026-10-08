@@ -1,11 +1,10 @@
 """Tests for .gitignore honouring (rule OPS-GITIGNORE) and its overrides."""
-from pathlib import Path
-from smartpangolin.gitignore import _Rule, GitignoreSpec, build_spec
+from smartpangolin.gitignore import _Rule, GitignoreSpec
 from smartpangolin import api
 
 
 def _spec(lines, base=""):
-    return GitignoreSpec([_Rule(l, base) for l in lines])
+    return GitignoreSpec([_Rule(line, base) for line in lines])
 
 
 def test_matcher_basics():
@@ -27,12 +26,12 @@ def test_matcher_negation_last_wins():
 def _tree(tmp_path):
     (tmp_path / "src").mkdir()
     (tmp_path / "logs").mkdir()
-    (tmp_path / ".gitignore").write_text("*.log\nsecret_notes.txt\n!keep.log\n")
-    (tmp_path / "src" / "app.py").write_text("print('hi')\n")
-    (tmp_path / "logs" / "run.log").write_text("debug\n")
-    (tmp_path / "keep.log").write_text("keep\n")
-    (tmp_path / "secret_notes.txt").write_text("internal\n")
-    (tmp_path / "README.md").write_text("readme\n")
+    (tmp_path / ".gitignore").write_text("*.log\nsecret_notes.txt\n!keep.log\n", encoding="utf-8")
+    (tmp_path / "src" / "app.py").write_text("print('hi')\n", encoding="utf-8")
+    (tmp_path / "logs" / "run.log").write_text("debug\n", encoding="utf-8")
+    (tmp_path / "keep.log").write_text("keep\n", encoding="utf-8")
+    (tmp_path / "secret_notes.txt").write_text("internal\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("readme\n", encoding="utf-8")
     return tmp_path
 
 

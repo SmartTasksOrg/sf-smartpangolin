@@ -22,10 +22,10 @@ def test_true_binary_nonsafe_ext_is_failclosed(tmp_path):
 
 
 def test_zero_width_split_is_caught(tmp_path):
-    (tmp_path / "k.txt").write_text("AKIA\u200bIOSFODNN7EXAMPLE\n")   # ZWSP inside key
+    (tmp_path / "k.txt").write_text("AKIA\u200bIOSFODNN7EXAMPLE\n", encoding="utf-8")   # ZWSP inside key
     assert "k.txt" not in _shipped(tmp_path)
 
 
 def test_plain_secret_is_caught(tmp_path):
-    (tmp_path / "c.txt").write_text(KEY + "\n")
+    (tmp_path / "c.txt").write_text(KEY + "\n", encoding="utf-8")
     assert "c.txt" not in _shipped(tmp_path)

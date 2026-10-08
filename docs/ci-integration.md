@@ -46,14 +46,16 @@ It fails the PR if a *tracked* file trips a `SEC-PATH-*`, `SEC-CONT-*`, or
 pango:
   image: python:3.12-slim
   script:
-    - pip install smartpangolin
+    # pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
+    - python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
     - pango pack --root . --share public --dry-run --debug
 ```
 
 ## Producing a sealed context artifact on release
 
 ```yaml
-- run: pip install smartpangolin
+# pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
+- run: python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
 - run: pango pack --root . --share public
 - uses: actions/upload-artifact@v4
   with:
