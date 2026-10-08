@@ -88,7 +88,6 @@ def test_verify_passes_on_fresh_zip(project):
 def test_verify_detects_corruption(project, tmp_path):
     r = pack(project, share="public", no_git_list=True)
     # rewrite one file in the zip to a different content
-    import shutil
     bad = tmp_path / "bad.zip"
     with zipfile.ZipFile(r.zip_path) as zin, zipfile.ZipFile(bad, "w") as zout:
         for item in zin.infolist():

@@ -334,7 +334,8 @@ def _read_head_tail(path, n=1_048_576):
         with path.open("rb") as fh:
             head = fh.read(n)
             try:
-                fh.seek(-n, 2); tail = fh.read()
+                fh.seek(-n, 2)
+                tail = fh.read()
             except OSError:
                 tail = b""
         return head + b"\n" + tail
@@ -995,8 +996,10 @@ def verify_zip(zip_path: Path):
         safe_print(f"  files      : {man['file_count']}   excluded: {man['excluded_count']}")
         ch = hashlib.sha256()
         for f in man["files"]:
-            ch.update(f["path"].encode("utf-8")); ch.update(b"\x00")
-            ch.update(f["sha256"].encode("ascii")); ch.update(b"\n")
+            ch.update(f["path"].encode("utf-8"))
+            ch.update(b"\x00")
+            ch.update(f["sha256"].encode("ascii"))
+            ch.update(b"\n")
         recorded = man.get("content_sha256")
         if recorded:
             ok = ch.hexdigest() == recorded
