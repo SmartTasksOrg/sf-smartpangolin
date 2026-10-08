@@ -1,4 +1,4 @@
-.PHONY: help install dev test lint build publish-test publish clean
+.PHONY: help install dev test lint build publish clean
 
 help:
 	@echo "install       editable install (runtime only)"
@@ -6,8 +6,7 @@ help:
 	@echo "test          run pytest"
 	@echo "lint          ruff check"
 	@echo "build         build sdist + wheel into dist/"
-	@echo "publish-test  upload to TestPyPI"
-	@echo "publish       upload to PyPI"
+	@echo "publish       (disabled) releases are published only by .github/workflows/release.yml"
 	@echo "clean         remove build artifacts"
 
 install:
@@ -25,12 +24,8 @@ lint:
 build: clean
 	python -m build
 
-publish-test: build
-	python -m twine upload --repository testpypi dist/*
-
-publish: build
-	python -m twine check dist/*
-	python -m twine upload dist/*
+publish:
+	@echo "Releases are published only by .github/workflows/release.yml (tag vX.Y.Z)." && exit 1
 
 clean:
 	rm -rf build dist ./*.egg-info src/*.egg-info

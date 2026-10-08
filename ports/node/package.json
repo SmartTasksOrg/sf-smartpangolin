@@ -1,9 +1,9 @@
 {
-  "name": "pangolin-check",
+  "name": "sf-smartpangolin-check",
   "version": "1.0.0",
   "description": "Native Node/CI port of SmartPangolin: scan a tree for secrets in filenames & content and honour .gitignore before sharing code externally or with an LLM. Zero dependencies.",
   "bin": {
-    "pangolin-check": "bin/cli.js"
+    "sf-smartpangolin-check": "bin/cli.js"
   },
   "main": "lib/scanner.js",
   "type": "commonjs",
@@ -42,6 +42,7 @@
     "node": ">=16"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   }
 }
