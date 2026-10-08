@@ -3,7 +3,7 @@ requires = ["hatchling>=1.21"]
 build-backend = "hatchling.build"
 
 [project]
-name = "smartpangolin"
+name = "sf-smartpangolin"
 dynamic = ["version"]
 description = "Deterministic, fail-closed, auditable secret-scrubbing packager for sharing code and data with LLMs and third parties."
 readme = "README.md"
@@ -46,28 +46,27 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/SmartTasksOrg/smartpangolin"
-Documentation = "https://github.com/SmartTasksOrg/smartpangolin/tree/main/docs"
-Repository = "https://github.com/SmartTasksOrg/smartpangolin"
-Issues = "https://github.com/SmartTasksOrg/smartpangolin/issues"
+Homepage = "https://github.com/SmartTasksOrg/sf-smartpangolin"
+Documentation = "https://github.com/SmartTasksOrg/sf-smartpangolin/tree/main/docs"
+Repository = "https://github.com/SmartTasksOrg/sf-smartpangolin"
+Issues = "https://github.com/SmartTasksOrg/sf-smartpangolin/issues"
 "SmartTasks (data fabric)" = "https://smarttasks.cloud"
 "IAIso (control framework)" = "https://iaiso.org"
 "Model repacks (Hugging Face)" = "https://huggingface.co/smarttasks"
 
 [project.scripts]
-pango = "smartpangolin.cli:main"
-smartpangolin = "smartpangolin.cli:main"
-smartpangolin-mcp = "smartpangolin.mcp:main"
+sf-smartpangolin = "sf_smartpangolin.cli:main"
+sf-smartpangolin-mcp = "sf_smartpangolin.mcp:main"
 
 [tool.hatch.version]
-path = "src/smartpangolin/_version.py"
+path = "src/sf_smartpangolin/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/smartpangolin"]
+packages = ["src/sf_smartpangolin"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src/smartpangolin",
+    "src/sf_smartpangolin",
     "docs",
     "examples",
     "adapters",

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-smartpangolin.engine — deterministic, secret-scrubbing share packager (core).
+sf_smartpangolin.engine — deterministic, secret-scrubbing share packager (core).
 
 This module is the deterministic core of SmartPangolin.
 
@@ -691,7 +691,7 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
     meta["content_sha256"] = content_sha256
 
     manifest = {
-        "schema": "smartpangolin.share_manifest/v1",
+        "schema": "sf_smartpangolin.share_manifest/v1",
         "legacy_schema": "smarttasks.share_manifest/v1",
         "generated_utc": meta["generated_utc"],
         "share_mode": meta["share_mode"],
@@ -709,7 +709,7 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
         "files": manifest_files,
     }
     exclusions = {
-        "schema": "smartpangolin.share_exclusions/v1",
+        "schema": "sf_smartpangolin.share_exclusions/v1",
         "generated_utc": meta["generated_utc"],
         "share_mode": meta["share_mode"],
         "policy_sha256": meta["policy_sha256"],
@@ -719,7 +719,7 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
         "entries": excluded,
     }
     policy = {
-        "schema": "smartpangolin.share_policy/v1",
+        "schema": "sf_smartpangolin.share_policy/v1",
         "policy_version": POLICY_VERSION,
         "policy_sha256": meta["policy_sha256"],
         "share_mode": meta["share_mode"],
@@ -827,7 +827,7 @@ def render_report(manifest, exclusions, meta):
         f"- Selection: {meta['selection']}",
         f"- Policy: {POLICY_VERSION} (`{meta['policy_sha256'][:16]}…`)",
         f"- Content SHA256: `{meta['content_sha256']}`",
-        f"- Tool: smartpangolin {VERSION}",
+        f"- Tool: sf-smartpangolin {VERSION}",
         "",
         f"**Included: {manifest['file_count']} files, "
         f"{manifest['total_bytes'] / 1024:.1f} KiB**  ",

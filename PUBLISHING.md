@@ -5,10 +5,10 @@ Placeholders to set first: the GitHub org (`smarttasks`), the Maven `groupId`
 `io.github.<your-org>`), and real `authors`/URLs. Regenerate ports after any rule
 change with `python3 tools/export_policy.py`.
 
-## PyPI — `smartpangolin` (Python, reference + MCP server)
+## PyPI — `sf-smartpangolin` (Python, reference + MCP server)
     python -m build
     twine upload dist/*            # or the .github/workflows/release.yml Trusted Publisher
-Ships the `pango` CLI and the `smartpangolin-mcp` MCP server. `twine check` passes.
+Ships the `sf-smartpangolin` CLI and the `sf-smartpangolin-mcp` MCP server. `twine check` passes.
 
 ## npm — `pangolin-check` (Node port)
     cd ports/node && npm login && npm publish

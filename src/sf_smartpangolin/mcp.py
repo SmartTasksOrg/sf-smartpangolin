@@ -11,7 +11,7 @@ sharing code:
                    content, .gitignore, local-infra), nothing written.
   pangolin_pack  — seal a share zip (only when you actually want the artifact).
 
-Requires `smartpangolin` importable (install SmartPangolin as the README, 'Install', describes), or run with
+Requires `sf-smartpangolin` importable (install SmartPangolin as the README, 'Install', describes), or run with
 PYTHONPATH pointed at the repo's src/.
 
 Register (Claude Desktop / Cursor / Cline / Windsurf / Zed / Continue):
@@ -23,10 +23,10 @@ import sys
 import traceback
 
 PROTOCOL = "2024-11-05"
-SERVER = {"name": "smartpangolin", "version": "1.2.1"}
+SERVER = {"name": "sf-smartpangolin", "version": "1.2.1"}
 
 try:
-    from smartpangolin import api
+    from sf_smartpangolin import api
 except Exception:  # pragma: no cover - surfaced to the client at call time
     api = None
 
@@ -64,7 +64,7 @@ TOOLS = [
 
 def _need_api():
     if api is None:
-        raise RuntimeError("smartpangolin is not importable. Install SmartPangolin (see the README, 'Install') "
+        raise RuntimeError("sf-smartpangolin is not importable. Install SmartPangolin (see the README, 'Install') "
                            "or set PYTHONPATH to the repo's src/.")
 
 

@@ -18,14 +18,14 @@
   ],
   "license": "Apache-2.0",
   "author": "SmartTasks Lab (Roen Branham, Le Thanh)",
-  "homepage": "https://github.com/SmartTasksOrg/smartpangolin#readme",
+  "homepage": "https://github.com/SmartTasksOrg/sf-smartpangolin#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SmartTasksOrg/smartpangolin.git",
+    "url": "git+https://github.com/SmartTasksOrg/sf-smartpangolin.git",
     "directory": "ports/node"
   },
   "bugs": {
-    "url": "https://github.com/SmartTasksOrg/smartpangolin/issues"
+    "url": "https://github.com/SmartTasksOrg/sf-smartpangolin/issues"
   },
   "keywords": [
     "security",
@@ -35,7 +35,7 @@
     "ci",
     "pre-publish",
     "llm",
-    "smartpangolin",
+    "sf-smartpangolin",
     "pangolin"
   ],
   "engines": {

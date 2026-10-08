@@ -1,6 +1,6 @@
 # SmartPangolin ports — the policy is the contract
 
-The Python package (`pango`) is the reference implementation. These are **native,
+The Python package (`sf-smartpangolin`) is the reference implementation. These are **native,
 dependency-free ports** for teams that live in other ecosystems and want a
 pre-publish / CI gate without a Python runtime.
 
@@ -8,7 +8,7 @@ They do **not** re-invent the ruleset. `spec/policy.json` is exported from the
 Python engine (`tools/export_policy.py`) and every port loads *that same spec*:
 
 ```
-src/smartpangolin/engine.py  ──export──▶  spec/policy.json
+src/sf_smartpangolin/engine.py  ──export──▶  spec/policy.json
                                               │
                  ┌────────────────────────────┼────────────────────────────┐
         ports/node   ports/go   ports/java   ports/php

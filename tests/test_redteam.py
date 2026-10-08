@@ -1,5 +1,5 @@
 """Red-team regressions: secret-smuggling evasions the scanner must catch."""
-from smartpangolin import api
+from sf_smartpangolin import api
 
 KEY = "AKIAIOSFODNN7EXAMPLE"  # matches SEC-CONT-AWSKEY
 

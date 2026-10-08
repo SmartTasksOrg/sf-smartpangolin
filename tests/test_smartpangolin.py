@@ -1,4 +1,4 @@
-from smartpangolin import cli
+from sf_smartpangolin import cli
 
 def test_demo_runs():
     assert cli.main(["--demo"]) == 0

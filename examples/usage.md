@@ -1,7 +1,7 @@
 # Using SmartPangolin
 
 ```bash
-smartpangolin --demo
+sf-smartpangolin --demo
 ```
 
 <!-- SMARTTASKS-MODELS:START -->

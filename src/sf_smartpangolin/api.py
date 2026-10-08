@@ -1,5 +1,5 @@
 """
-smartpangolin.api — high-level orchestration.
+sf_smartpangolin.api — high-level orchestration.
 
 :func:`pack` is the single entry point most callers want: point it at a project
 root, get back a sealed zip plus its audit records. It wires together

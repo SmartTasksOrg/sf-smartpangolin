@@ -8,7 +8,7 @@ Add to `.pre-commit-config.yaml` (see `examples/pre-commit-config.example.yaml`)
 
 ```yaml
 repos:
-  - repo: https://github.com/SmartTasksOrg/smartpangolin
+  - repo: https://github.com/SmartTasksOrg/sf-smartpangolin
     rev: v1.0.0
     hooks:
       - id: pangolin-guard
@@ -22,7 +22,7 @@ surfaces any secret-class exclusion before the commit lands.
 Use the reusable composite action (`adapters/github-action/action.yml`):
 
 ```yaml
-name: pango
+name: sf-smartpangolin
 on: [pull_request]
 jobs:
   guard:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - uses: SmartTasksOrg/smartpangolin/adapters/github-action@v1
+      - uses: SmartTasksOrg/sf-smartpangolin/adapters/github-action@v1
         with:
           root: .
           share: public
@@ -43,25 +43,25 @@ It fails the PR if a *tracked* file trips a `SEC-PATH-*`, `SEC-CONT-*`, or
 ## GitLab CI
 
 ```yaml
-pango:
+sf-smartpangolin:
   image: python:3.12-slim
   script:
-    # pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
-    - python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
-    - pango pack --root . --share public --dry-run --debug
+    # pinned to a commit: sf-smartpangolin is not on PyPI yet; replace with a release tag
+    - python -m pip install "git+https://github.com/SmartTasksOrg/sf-smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
+    - sf-smartpangolin pack --root . --share public --dry-run --debug
 ```
 
 ## Producing a sealed context artifact on release
 
 ```yaml
-# pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
-- run: python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
-- run: pango pack --root . --share public
+# pinned to a commit: sf-smartpangolin is not on PyPI yet; replace with a release tag
+- run: python -m pip install "git+https://github.com/SmartTasksOrg/sf-smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
+- run: sf-smartpangolin pack --root . --share public
 - uses: actions/upload-artifact@v4
   with:
     name: sealed-context
     path: ../extracted_source/share_archive/*.zip
 ```
 
-Downstream jobs (or a human) can `pango verify` the artifact, and compare its
+Downstream jobs (or a human) can `sf-smartpangolin verify` the artifact, and compare its
 `content_sha256` across builds to confirm the shared payload didn't change.
