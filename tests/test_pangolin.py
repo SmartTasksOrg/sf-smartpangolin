@@ -16,12 +16,12 @@ def project(tmp_path):
     root = tmp_path / "proj"
     (root / "src").mkdir(parents=True)
     (root / ".secret").mkdir()
-    (root / ".env").write_text(f"HF_TOKEN={HF}\n")
-    (root / ".env.example").write_text("HF_TOKEN=your-token-here\n")
-    (root / "src" / "server.py").write_text('print("bind 10.1.2.3")\n')
-    (root / "src" / "app.py").write_text('print("hello")\n')
-    (root / "README.md").write_text("# proj\n")
-    (root / ".secret" / "prod.env").write_text(f"GH={GHP}\n")
+    (root / ".env").write_text(f"HF_TOKEN={HF}\n", encoding="utf-8")
+    (root / ".env.example").write_text("HF_TOKEN=your-token-here\n", encoding="utf-8")
+    (root / "src" / "server.py").write_text('print("bind 10.1.2.3")\n', encoding="utf-8")
+    (root / "src" / "app.py").write_text('print("hello")\n', encoding="utf-8")
+    (root / "README.md").write_text("# proj\n", encoding="utf-8")
+    (root / ".secret" / "prod.env").write_text(f"GH={GHP}\n", encoding="utf-8")
     return root
 
 
@@ -100,7 +100,7 @@ def test_verify_detects_corruption(project, tmp_path):
 
 def test_allow_override_is_recorded_and_changes_fingerprint(project):
     base = policy_fingerprint()
-    (project / ".pangolin.json").write_text(json.dumps({"deny_globs": ["*.md"]}))
+    (project / ".pangolin.json").write_text(json.dumps({"deny_globs": ["*.md"]}), encoding="utf-8")
     _cfg, user = engine.load_pangolin_config(project)
     assert policy_fingerprint(user) != base
 
@@ -111,7 +111,7 @@ def test_allow_override_is_recorded_and_changes_fingerprint(project):
 
 def test_allow_force_includes_and_records_override(project):
     # scorecard.py trips SEC-CONT-ASSIGN (quoted literal), then we allow it
-    (project / "src" / "scorecard.py").write_text('api_key = "not-needed-value"\n')
+    (project / "src" / "scorecard.py").write_text('api_key = "not-needed-value"\n', encoding="utf-8")
     dropped = pack(project, share="public", no_git_list=True, zip_name="d.zip", no_purge=True)
     assert "src/scorecard.py" not in _names(dropped.zip_path)
 
