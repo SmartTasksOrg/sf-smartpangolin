@@ -6,7 +6,7 @@ LangChain tool for SmartPangolin.
 """
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
-from smartpangolin import api
+from sf_smartpangolin import api
 
 
 class ScanInput(BaseModel):

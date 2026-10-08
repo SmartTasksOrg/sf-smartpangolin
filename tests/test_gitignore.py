@@ -1,6 +1,6 @@
 """Tests for .gitignore honouring (rule OPS-GITIGNORE) and its overrides."""
-from smartpangolin.gitignore import _Rule, GitignoreSpec
-from smartpangolin import api
+from sf_smartpangolin.gitignore import _Rule, GitignoreSpec
+from sf_smartpangolin import api
 
 
 def _spec(lines, base=""):

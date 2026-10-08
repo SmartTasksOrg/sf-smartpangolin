@@ -15,7 +15,7 @@ scanner against the policy spec.
       <phase>verify</phase>
       <goals><goal>exec</goal></goals>
       <configuration>
-        <executable>pango</executable>
+        <executable>sf-smartpangolin</executable>
         <arguments>
           <argument>pack</argument><argument>--root</argument><argument>.</argument>
           <argument>--share</argument><argument>public</argument>
@@ -34,7 +34,7 @@ scanner against the policy spec.
 
 ## Port the scanner (roadmap)
 
-`java.util.regex` handles the anchored patterns from `pango policy`.
+`java.util.regex` handles the anchored patterns from `sf-smartpangolin policy`.
 Reproduce the `content_sha256` recipe from
 [../../docs/porting.md](../../docs/porting.md) to stay byte-conformant.
 

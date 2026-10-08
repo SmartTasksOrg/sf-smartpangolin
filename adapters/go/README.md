@@ -44,7 +44,7 @@ func main() {
 
 ## Port the scanner (roadmap)
 
-1. `pango policy > policy.json` — the full ruleset, versioned.
+1. `sf-smartpangolin policy > policy.json` — the full ruleset, versioned.
 2. Compile `content_rules` and `local_rules` with Go's `regexp` (RE2). Note the
    Anthropic-before-OpenAI ordering matters for attribution.
 3. Match `path_rules` globs with `path.Match` (lower-cased basename).

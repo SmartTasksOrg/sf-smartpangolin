@@ -8,7 +8,7 @@ import json
 import os
 import sys
 
-from smartpangolin.core import scan
+from sf_smartpangolin.core import scan
 
 TOOL_NAME = "smartpangolin_scan"
 DESCRIPTION = "Scan a project tree for secrets in paths and content before sharing it with an LLM or third party."

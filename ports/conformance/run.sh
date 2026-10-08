@@ -11,7 +11,7 @@ command -v javac >/dev/null && ( cd "$REPO/ports/java" && mkdir -p out && javac 
 pyref() { PYTHONPATH="$REPO/src" python3 - "$1" "$2" <<'PY'
 import json,sys
 from pathlib import Path
-from smartpangolin import engine as E, gitignore as G, pii as P
+from sf_smartpangolin import engine as E, gitignore as G, pii as P
 root=Path("/tmp/pangolin_fixture"); mode=sys.argv[1]; do_pii=sys.argv[2]=="1"
 spec=G.build_spec(root); sink=[]
 c,_=E.collect_candidates(root, root/"share_archive", gitignore_spec=spec, gitignore_sink=sink)

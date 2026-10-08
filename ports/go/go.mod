@@ -1,3 +1,3 @@
-module smartpangolin/pangolincheck
+module sf-smartpangolin/pangolincheck
 
 go 1.22

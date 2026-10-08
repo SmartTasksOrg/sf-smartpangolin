@@ -19,4 +19,4 @@ pip install -e ".[dev]"
 
 echo
 echo "[bootstrap] done. Activate with:  source $VENV/bin/activate"
-pango --version
+sf-smartpangolin --version

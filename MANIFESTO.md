@@ -49,6 +49,6 @@ The whole point is to share the thing. Go.
 
 ---
 
-*Pango is the mascot of [SmartPangolin](https://github.com/SmartTasksOrg/smartpangolin).
+*Pango is the mascot of [SmartPangolin](https://github.com/SmartTasksOrg/sf-smartpangolin).
 Each commandment has an icon in `brand/svg/` — pair them with the lines above on
 social, in docs, or across the site.*

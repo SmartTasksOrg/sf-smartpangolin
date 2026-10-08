@@ -21,7 +21,7 @@ draft below.
 **Dev.to / Hashnode:** a data-story — "what I found running SmartPangolin across N real
 repos/prompts/answers" — tool as the byproduct. Durable SEO tail.
 
-**MCP registry + awesome-lists:** list `smartpangolin-mcp`; PR into awesome-mcp and the
+**MCP registry + awesome-lists:** list `sf-smartpangolin-mcp`; PR into awesome-mcp and the
 relevant awesome-devsecops / awesome-ai list.
 
 **X / Bluesky / Mastodon:** the screenshot + the one-liner people can run immediately.

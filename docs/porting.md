@@ -13,10 +13,10 @@ to Python.
 ## Step 1 — get the policy
 
 ```bash
-pango policy > policy.json
+sf-smartpangolin policy > policy.json
 ```
 
-This is a versioned document (`smartpangolin.share_policy/v1`) carrying every rule ID,
+This is a versioned document (`sf_smartpangolin.share_policy/v1`) carrying every rule ID,
 every glob, every content/local regex description, the allowlist, and the
 `policy_sha256`. Pin to a `policy_version`; treat a change in `policy_sha256` as a
 breaking change to your port.
@@ -73,7 +73,7 @@ byte-for-byte right and your port and the Python tool agree on payload identity.
 ## Step 5 — emit the artifacts
 
 Match the schemas in `src/pango/data/manifest.schema.json` and the
-`smartpangolin.share_exclusions/v1` / `smartpangolin.share_policy/v1` shapes. For
+`sf_smartpangolin.share_exclusions/v1` / `sf_smartpangolin.share_policy/v1` shapes. For
 byte-reproducible zips, use a fixed entry timestamp (1980-01-01), sorted entry
 order, and honour `SOURCE_DATE_EPOCH` for the manifest's `generated_utc`.
 

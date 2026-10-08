@@ -5,7 +5,7 @@ LlamaIndex tool for SmartPangolin.
     agent = FunctionAgent(tools=[pangolin_tool], llm=llm)
 """
 from llama_index.core.tools import FunctionTool
-from smartpangolin import api
+from sf_smartpangolin import api
 
 
 def pangolin_scan(root: str = ".", mode: str = "public") -> str:

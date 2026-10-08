@@ -1,5 +1,5 @@
 """
-smartpangolin.cli — command-line interface.
+sf_smartpangolin.cli — command-line interface.
 
 Subcommands:
   pack     seal a project tree into a share zip (default)
@@ -10,7 +10,7 @@ Subcommands:
   policy   print the active policy (JSON) or its fingerprint
   init     scaffold .secret/ and .pangolin.json in a repo
 
-`smartpangolin` with no subcommand behaves like `smartpangolin pack`.
+`sf-smartpangolin` with no subcommand behaves like `sf-smartpangolin pack`.
 """
 from __future__ import annotations
 
@@ -100,11 +100,11 @@ def _add_pack(p):
 
 def build_parser():
     p = argparse.ArgumentParser(
-        prog="pango",
+        prog="sf-smartpangolin",
         description="SmartPangolin — deterministic, fail-closed, auditable share packager.",
         formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--version", action="version",
-                   version=f"smartpangolin {__version__} (policy {engine.POLICY_VERSION})")
+                   version=f"sf-smartpangolin {__version__} (policy {engine.POLICY_VERSION})")
     sub = p.add_subparsers(dest="command")
 
     _add_pack(sub.add_parser("pack", help="Seal a project tree into a share zip"))
@@ -221,7 +221,7 @@ def _cmd_policy(args):
         print(fp)
         return 0
     doc = {
-        "schema": "smartpangolin.share_policy/v1",
+        "schema": "sf_smartpangolin.share_policy/v1",
         "policy_version": engine.POLICY_VERSION,
         "policy_sha256": fp,
         "path_rules": [{"id": r, "globs": g, "desc": d} for r, g, d in engine.PATH_RULES],
@@ -283,20 +283,20 @@ def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
 
     # Smart* family hooks — keep the family contract (demo/version) working
-    # alongside the full `pango` packager CLI. These short-circuit before the
-    # pack-by-default convenience so `pango` (no args) never scans the cwd.
+    # alongside the full `sf-smartpangolin` packager CLI. These short-circuit before the
+    # pack-by-default convenience so `sf-smartpangolin` (no args) never scans the cwd.
     if argv and ("--version" in argv or "-V" in argv):
         print(f"SmartPangolin {__version__}")
         return 0
     if not argv or "--demo" in argv:
         print(f"SmartPangolin {__version__} - IAIso \u00a71 - Secure Sharing")
         print(core_demo())
-        print("\nFull packager: `pango pack --root <dir> --share public`  |  "
+        print("\nFull packager: `sf-smartpangolin pack --root <dir> --share public`  |  "
               "docs/  |  https://smarttasks.cloud")
         return 0
 
-    # Convenience: `smartpangolin` or `smartpangolin --root ...` (no subcommand and
-    # not a top-level flag) is treated as `smartpangolin pack ...`.
+    # Convenience: `sf-smartpangolin` or `sf-smartpangolin --root ...` (no subcommand and
+    # not a top-level flag) is treated as `sf-smartpangolin pack ...`.
     if not argv:
         argv = ["pack"]
     elif argv[0] not in PACK_SUBCOMMANDS and argv[0] not in _TOP_LEVEL:

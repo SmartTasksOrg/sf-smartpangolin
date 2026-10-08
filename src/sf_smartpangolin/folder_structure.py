@@ -1,5 +1,5 @@
 """
-smartpangolin.folder_structure — structural pre-pass (importable).
+sf_smartpangolin.folder_structure — structural pre-pass (importable).
 
 Walks a project tree,
 applies a coarse structural exclusion pass (build dirs, backups, binary
@@ -9,7 +9,7 @@ extensions), and writes:
   - a flat path-list file (machine view, consumed by the packager)
 
 This is deliberately *coarse*. It is NOT the secret scanner — that is the
-packager's job (:mod:`smartpangolin.engine`). Stage 1 exists so large trees can be
+packager's job (:mod:`sf_smartpangolin.engine`). Stage 1 exists so large trees can be
 enumerated once and reused, and so the path list can be hand-edited.
 """
 from __future__ import annotations

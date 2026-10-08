@@ -38,7 +38,7 @@ runs:
         PANGO_ROOT: ${{ inputs.root }}
         PANGO_SHARE: ${{ inputs.share }}
       run: |
-        pango pack --root "$PANGO_ROOT" --share "$PANGO_SHARE" \
+        sf-smartpangolin pack --root "$PANGO_ROOT" --share "$PANGO_SHARE" \
           --dry-run --debug --zip-name pr-guard.zip | tee seal.log
         # Turn any credential-class exclusion of a *tracked* file into a failure.
         if grep -Eq '\[drop\].*<- SEC-(PATH|CONT|DIR)' seal.log; then
