@@ -1,5 +1,9 @@
 """SmartPangolin core — deterministic secret scanner (paths + content)."""
-import base64, binascii, hashlib, os, re
+import base64
+import binascii
+import hashlib
+import os
+import re
 from .models import Finding, ScanResult
 
 PATH_RULES = [

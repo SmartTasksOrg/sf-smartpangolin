@@ -1,11 +1,10 @@
 """Tests for .gitignore honouring (rule OPS-GITIGNORE) and its overrides."""
-from pathlib import Path
-from smartpangolin.gitignore import _Rule, GitignoreSpec, build_spec
+from smartpangolin.gitignore import _Rule, GitignoreSpec
 from smartpangolin import api
 
 
 def _spec(lines, base=""):
-    return GitignoreSpec([_Rule(l, base) for l in lines])
+    return GitignoreSpec([_Rule(line, base) for line in lines])
 
 
 def test_matcher_basics():
