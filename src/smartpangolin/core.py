@@ -1,5 +1,9 @@
 """SmartPangolin core — deterministic secret scanner (paths + content)."""
-import base64, binascii, hashlib, os, re
+import base64
+import binascii
+import hashlib
+import os
+import re
 from .models import Finding, ScanResult
 
 PATH_RULES = [
@@ -59,7 +63,7 @@ def scan(root: str) -> ScanResult:
                 if rx.search(rel.replace(os.sep, "/")):
                     findings.append(Finding(rid, "high", rel, "dangerous filename"))
             try:
-                text = open(os.path.join(dp, f), "r", errors="ignore").read()
+                text = open(os.path.join(dp, f), "r", encoding="utf-8", errors="ignore").read()
             except Exception:
                 continue
             # 1) plaintext secrets

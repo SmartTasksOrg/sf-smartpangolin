@@ -208,7 +208,7 @@
       <p class="sub">Deterministic. Fail-closed. Stdlib-only. Every share ships with a hash-signed manifest and an audit of everything held back, and why.</p>
       <div class="cta-row">
         <div class="install" id="install" title="Copy">
-          <span class="dollar">$</span><span class="cmd">pip install smartpangolin</span><span class="copy" id="copytxt">Copy</span>
+          <span class="dollar">$</span><span class="cmd">git clone https://github.com/SmartTasksOrg/smartpangolin</span><span class="copy" id="copytxt">Copy</span>
         </div>
         <a class="primary" href="https://github.com/SmartTasksOrg/smartpangolin">View the repo →</a>
       </div>
@@ -336,7 +336,7 @@
     <h2>Point it at a repo. Get back something safe to send.</h2>
     <div class="cta-row">
       <div class="install" id="install2" title="Copy">
-        <span class="dollar">$</span><span class="cmd">pip install smartpangolin</span><span class="copy">Copy</span>
+        <span class="dollar">$</span><span class="cmd">git clone https://github.com/SmartTasksOrg/smartpangolin</span><span class="copy">Copy</span>
       </div>
       <a class="primary" href="https://github.com/SmartTasksOrg/smartpangolin">Open on GitHub →</a>
     </div>
@@ -388,7 +388,7 @@
   function wire(el){
     if(!el) return;
     el.addEventListener('click', function(){
-      navigator.clipboard && navigator.clipboard.writeText('pip install smartpangolin');
+      navigator.clipboard && navigator.clipboard.writeText('git clone https://github.com/SmartTasksOrg/smartpangolin');
       el.classList.add('copied');
       var t = el.querySelector('.copy'); if(t){var o=t.textContent; t.textContent='Copied ✓';
         setTimeout(function(){t.textContent=o; el.classList.remove('copied');},1400);}

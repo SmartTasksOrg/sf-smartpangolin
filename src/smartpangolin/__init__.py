@@ -33,8 +33,8 @@ from .engine import (
     PATH_ALLOWLIST,
 )
 from .triage import triage
-from . import core, models          # Smart* family quick-scan API
-from .core import scan
+from . import core as core, models as models  # Smart* family quick-scan API (re-exported)
+from .core import scan as scan
 
 __all__ = [
     "__version__",

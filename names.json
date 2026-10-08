@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "repo": "SmartTasksOrg/smartpangolin",
+  "checked_on": "2026-10-08",
+  "names": [
+    {
+      "registry": "pypi",
+      "name": "smartpangolin",
+      "registered": false,
+      "workflow": "release.yml",
+      "note": "first release pending; README in state A"
+    },
+    {
+      "registry": "pypi",
+      "name": "pango",
+      "registered": false,
+      "note": "someone else's placeholder package; never install it"
+    },
+    {
+      "registry": "npm",
+      "name": "pangolin-check",
+      "registered": false,
+      "note": "unscoped name, not ours"
+    },
+    {
+      "registry": "npm",
+      "name": "@smarttasks/pangolin-check",
+      "registered": false
+    },
+    {
+      "registry": "packagist",
+      "name": "smarttasks/pangolin-check",
+      "registered": false
+    },
+    {
+      "registry": "maven",
+      "name": "cloud.smarttasks:pangolin-check",
+      "registered": false
+    },
+    {
+      "registry": "mcp",
+      "name": "io.github.smarttasksorg/smartpangolin",
+      "registered": false
+    }
+  ],
+  "third_party": {
+    "pypi": [
+      "pip",
+      "build",
+      "twine",
+      "langchain-core",
+      "pydantic",
+      "llama-index-core",
+      "pytest",
+      "ruff"
+    ],
+    "npm": []
+  },
+  "local_images": [],
+  "git_owners": [
+    "SmartTasksOrg"
+  ],
+  "exclude_paths": []
+}

@@ -11,18 +11,34 @@ inputs:
     description: "Share mode: public or private"
     default: "public"
   version:
-    description: "SmartPangolin version to install"
-    default: "pango"
+    description: "Optional pip requirement or path to install instead of this action's own copy (leave empty)"
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
-    - name: Install SmartPangolin
+    - name: Install SmartPangolin from this action's own repository
       shell: bash
-      run: pip install "${{ inputs.version }}"
+      env:
+        PKG: ${{ inputs.version }}
+      run: |
+        # Never install by name: "smartpangolin" is not on PyPI yet, and PyPI
+        # "pango" is someone else's placeholder package.
+        if [ -z "$PKG" ]; then
+          PKG="$GITHUB_ACTION_PATH/../.."
+          if [ ! -f "$PKG/pyproject.toml" ]; then
+            echo "SmartPangolin source not found next to the action ($PKG); set the 'version' input" >&2
+            exit 1
+          fi
+        fi
+        python -m pip install --quiet "$PKG"
     - name: Dry-run seal (fails on any SEC-* hit in tracked files)
       shell: bash
+      env:
+        PANGO_ROOT: ${{ inputs.root }}
+        PANGO_SHARE: ${{ inputs.share }}
       run: |
-        pango pack --root "${{ inputs.root }}" --share "${{ inputs.share }}" \
+        pango pack --root "$PANGO_ROOT" --share "$PANGO_SHARE" \
           --dry-run --debug --zip-name pr-guard.zip | tee seal.log
         # Turn any credential-class exclusion of a *tracked* file into a failure.
         if grep -Eq '\[drop\].*<- SEC-(PATH|CONT|DIR)' seal.log; then

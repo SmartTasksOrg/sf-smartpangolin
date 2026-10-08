@@ -11,7 +11,7 @@ sharing code:
                    content, .gitignore, local-infra), nothing written.
   pangolin_pack  — seal a share zip (only when you actually want the artifact).
 
-Requires `smartpangolin` importable (pip install smartpangolin), or run with
+Requires `smartpangolin` importable (install SmartPangolin as the README, 'Install', describes), or run with
 PYTHONPATH pointed at the repo's src/.
 
 Register (Claude Desktop / Cursor / Cline / Windsurf / Zed / Continue):
@@ -64,7 +64,7 @@ TOOLS = [
 
 def _need_api():
     if api is None:
-        raise RuntimeError("smartpangolin is not importable. `pip install smartpangolin` "
+        raise RuntimeError("smartpangolin is not importable. Install SmartPangolin (see the README, 'Install') "
                            "or set PYTHONPATH to the repo's src/.")
 
 

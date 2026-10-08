@@ -40,5 +40,6 @@ r = api.pack(".", share="public", dry_run=True)
 assert not any(k.startswith("SEC-") for k in r.exclusions["by_rule"]), "secrets present"
 ```
 
-Most kits need `pip install smartpangolin`; the Husky/Node path uses the native
+Most kits need SmartPangolin installed from a clone (`python -m pip install .`
+in a clone of this repository; it is not on PyPI yet); the Husky/Node path uses the native
 `ports/node` scanner and needs no Python at all.

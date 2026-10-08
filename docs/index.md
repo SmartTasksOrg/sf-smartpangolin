@@ -11,8 +11,14 @@
 
 ## 30-second tour
 
+SmartPangolin is not on PyPI yet; install from a clone (README, "Install").
+
 ```bash
-pip install smartpangolin
+git clone https://github.com/SmartTasksOrg/smartpangolin
+cd smartpangolin
+python -m venv .venv
+. .venv/bin/activate          # Windows PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install .
 pango init --root .                      # scaffold the .secret standard
 pango pack --root . --share public       # seal for a third party
 pango verify <zip>                        # prove integrity

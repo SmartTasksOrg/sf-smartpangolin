@@ -15,8 +15,14 @@ As AI reshapes how we work, a new gap opens: feeding code/docs to ai leaks secre
 `scan` at the exact moment the gap bites, and it works the second you clone it
 (a synthetic demo ships in `demo/`).
 
+SmartPangolin is not published on PyPI yet. Until this README says otherwise, a package called `smartpangolin` (or `pango`) on any registry is not ours.
+
 ```bash
-pip install smartpangolin
+git clone https://github.com/SmartTasksOrg/smartpangolin
+cd smartpangolin
+python -m venv .venv
+. .venv/bin/activate          # Windows PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install .
 smartpangolin --demo        # run against the bundled demo
 ```
 
@@ -24,10 +30,10 @@ smartpangolin --demo        # run against the bundled demo
 
 | Where you work | How you run it |
 |---|---|
-| **Python** | `pip install smartpangolin` |
+| **Python** | from a clone: `python -m pip install .` (not on PyPI yet) |
 | **Go · Java · Node · PHP** | native ports in [`ports/`](ports/), each verified against the Python reference by [`ports/conformance/run.sh`](ports/conformance/run.sh) |
 | **LangChain · LlamaIndex · function-calling · MCP** | drop-in integration kits in [`kits/`](kits/) |
-| **AI coding tools** (Cursor, Claude, Cline, Windsurf, Zed) | MCP server: `smartpangolin-mcp` |
+| **Flowise · VS Code** | ready-made wrappers in [`integrations/`](integrations/), all calling one `adapter.py` |
 | **CI / pre-commit** | add the hook from [`.pre-commit-hooks.yaml`](.pre-commit-hooks.yaml) |
 
 ## What's in this repo
@@ -37,8 +43,8 @@ smartpangolin --demo        # run against the bundled demo
 - **Language ports** — [`ports/`](ports/): native Go, Java, Node, PHP implementations that reproduce the Python reference, with a shared conformance harness.
 - **Integration kits** — [`kits/`](kits/): LangChain, LlamaIndex, function-calling, MCP, CI, and pre-commit starters.
 - **Adapters** — [`adapters/`](adapters/): GitHub Action and language adapters.
-- **Editor integration** — [`integrations/`](integrations/): VS Code integration.
-- **MCP server** — `smartpangolin-mcp`, for agentic/AI-coding clients.
+- **Framework integrations** — [`integrations/`](integrations/): Flowise, VS Code extension — each a thin wrapper over one `adapter.py` bound to the core.
+- **MCP server** — `smartpangolin-mcp` console script, for agentic/AI-coding clients.
 - **Reference docs** — [`docs/`](docs/): 10 documents (CLI, policy, design, FAQ, porting…).
 - **Also included** — a runnable [`demo/`](demo/), [`examples/`](examples/), the IAIso mapping [`spec/iaiso-map.json`](spec/iaiso-map.json), a browser [`site/playground.html`](site/playground.html), plus public smoke tests in `tests/`.
 

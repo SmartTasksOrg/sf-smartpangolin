@@ -88,8 +88,10 @@ def pack(root, *, share="public", focus=None, files=None,
     pii_skip_author = ss_cfg.get('pii_skip_author', pii_skip_author)
     user_policy['respect_gitignore'] = respect_gitignore
     user_policy['pii'] = pii
-    if pii and pii_allow: user_policy['pii_allow'] = sorted(pii_allow)
-    if ignore_files: user_policy['ignore_files'] = sorted(ignore_files)
+    if pii and pii_allow:
+        user_policy['pii_allow'] = sorted(pii_allow)
+    if ignore_files:
+        user_policy['ignore_files'] = sorted(ignore_files)
     user_path_rules = engine.user_path_rules_from_config(user_policy)
     rules = engine.compile_rules(user_path_rules)
     fingerprint = engine.policy_fingerprint(user_policy)
@@ -167,7 +169,8 @@ def pack(root, *, share="public", focus=None, files=None,
             try:
                 text = fp.read_text(encoding='utf-8')
             except (OSError, UnicodeDecodeError):
-                kept.append(i); continue
+                kept.append(i)
+                continue
             hits = _pii.scan_pii(text, allow=pii_allow, skip_author=pii_skip_author)
             if hits:
                 excluded.append({'path': i['path'], 'rule': hits[0]['rule'],

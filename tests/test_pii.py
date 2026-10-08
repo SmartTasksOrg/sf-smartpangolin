@@ -31,8 +31,8 @@ def test_redaction_and_author_preserved():
 
 
 def test_pack_pii_is_opt_in(tmp_path):
-    (tmp_path / "doc.md").write_text(DOC)
-    (tmp_path / "ok.txt").write_text("nothing here\n")
+    (tmp_path / "doc.md").write_text(DOC, encoding="utf-8")
+    (tmp_path / "ok.txt").write_text("nothing here\n", encoding="utf-8")
     off = api.pack(tmp_path, dry_run=True)
     assert "doc.md" in {f["path"] for f in off.manifest["files"]}          # ships by default
     on = api.pack(tmp_path, dry_run=True, pii=True)
