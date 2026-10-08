@@ -1,4 +1,4 @@
-<!-- mcp-name: io.github.smarttasksorg/sf-smartpangolin · part of the Smart* family -->
+<!-- mcp-name: io.github.smarttasksorg/sf-smartpangolin -->
 <h1 align="center">🦔 SmartPangolin</h1>
 <p align="center"><b>Scan before you share. Stop leaking secrets into AI models, agents, and tools.</b></p>
 <p align="center">
@@ -15,7 +15,13 @@ As AI reshapes how we work, a new gap opens: feeding code/docs to ai leaks secre
 `scan` at the exact moment the gap bites, and it works the second you clone it
 (a synthetic demo ships in `demo/`).
 
-SmartPangolin is not published on PyPI yet. Until this README says otherwise, a package called `smartpangolin` (or `pango`) on any registry is not ours.
+## Install
+
+SmartPangolin is not published on PyPI or any other package registry yet. Until
+this section says otherwise, a package called `sf-smartpangolin` on any registry
+is not ours, and neither is `smartpangolin`. The PyPI package `pango` is a placeholder published by someone else; it is not this tool.
+
+Install from a clone (Python 3.8 or later):
 
 ```bash
 git clone https://github.com/SmartTasksOrg/sf-smartpangolin
@@ -23,8 +29,17 @@ cd sf-smartpangolin
 python -m venv .venv
 . .venv/bin/activate          # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install .
-sf-smartpangolin --demo        # run against the bundled demo
+sf-smartpangolin --demo
 ```
+
+## Status
+
+- **Version 3.0.0, experimental.** A deterministic secret-scanning packager with 31 tests, including red-team regression cases; [SECURITY.md](SECURITY.md#detection-scope--limitations-be-honest-with-yourself) lists what it does not detect.
+- **Published:** nowhere yet; install from a clone (above).
+- **Tested:** lint, the 31 tests and a `sf-smartpangolin pack` dry run on Linux, Windows and macOS with Python 3.8, 3.10 and 3.12, on every push to master and every pull request (`.github/workflows/ci.yml`).
+- **Not tested:** Python 3.9, 3.11 and 3.13.
+- **Ports:** Go, Java, Node and PHP ports in `ports/` are checked against the Python reference by `ports/conformance/run.sh` (run by hand, not in CI); they are not published on any registry.
+- **Security review:** none independent. Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
 ## Run it in your stack
 

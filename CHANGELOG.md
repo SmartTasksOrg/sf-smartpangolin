@@ -3,6 +3,26 @@
 All notable changes to SmartPangolin are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is semantic.
 
+## Unreleased
+
+### Security
+- Install instructions no longer name packages the maintainers have not
+  published. Until the first release, install from a clone (README, "Install").
+- New `SECURITY.md` (private vulnerability reporting), `names.json` (the only
+  official package names) and a CI check that fails when a document names any
+  other package.
+- Releases are built and published only by `.github/workflows/release.yml`
+  through PyPI trusted publishing, with provenance attestations.
+
+### Changed
+- **Renamed (breaking), `sf-` = Smart Family:** repository `SmartTasksOrg/sf-smartpangolin`, PyPI package `sf-smartpangolin`, command `sf-smartpangolin`, import package `sf_smartpangolin`, MCP server `io.github.smarttasksorg/sf-smartpangolin`. The unprefixed names are not used any more, so nobody can be sent to a look-alike.
+- README: "Install" and "Status" sections (Status: experimental, no "production" claim); MCP marker is the bare server name.
+- `pyproject.toml`: "3 - Alpha" classifier (was "5 - Production/Stable"), licence files incl. NOTICE, URLs point at `master`.
+- Token uploads removed: `make publish`, `make publish-test` and `scripts/publish.sh` no longer upload; `PUBLISHING.md` rewritten.
+- Docs refer to tag `v3.0.0` (the first release) instead of `v1.0.0`/`v1`, which do not exist.
+- Node port package `sf-smartpangolin-check` (unpublished); Go module path `github.com/SmartTasksOrg/sf-smartpangolin/ports/go`.
+- `MARKETING.md` moved out of the public repository.
+
 ## [3.0.0] — 2026-08-04
 
 Aligned to the **Smart\* family v3.0.0** release. The full packager (`pango`

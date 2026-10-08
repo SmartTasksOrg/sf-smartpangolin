@@ -1,34 +1,8 @@
-# Publishing — one command per registry
+# Publishing
 
-Placeholders to set first: the GitHub org (`smarttasks`), the Maven `groupId`
-(`cloud.smarttasks`, needs domain/namespace ownership — or switch to
-`io.github.<your-org>`), and real `authors`/URLs. Regenerate ports after any rule
-change with `python3 tools/export_policy.py`.
-
-## PyPI — `sf-smartpangolin` (Python, reference + MCP server)
-    python -m build
-    twine upload dist/*            # or the .github/workflows/release.yml Trusted Publisher
-Ships the `sf-smartpangolin` CLI and the `sf-smartpangolin-mcp` MCP server. `twine check` passes.
-
-## npm — `pangolin-check` (Node port)
-    cd ports/node && npm login && npm publish
-Validated with `npm publish --dry-run` (6 files, test/ excluded).
-
-## Packagist — `smarttasks/pangolin-check` (PHP port)
-    # composer.json is valid (`composer validate`).
-    # Register once at https://packagist.org/packages/submit with the repo URL,
-    # then add the GitHub webhook so tags auto-publish.
-
-## Maven Central — `cloud.smarttasks:pangolin-check` (Java port)
-    cd ports/java && mvn -Prelease deploy      # needs Central Portal creds + a GPG key
-`pom.xml` is well-formed and `mvn validate` passes; `javac`+`jar` produces a
-runnable `pangolin-check.jar` (Main-Class: Main).
-
-## MCP registry — `io.github.smarttasks/smartpangolin`
-Publish the PyPI package first (the server ships in it), then:
-    cd publish
-    mcp-publisher login github        # authenticates the io.github.smarttasks namespace
-    mcp-publisher publish             # uploads server.json
-`publish/server.json` is **valid against the official schema**
-(`publish/mcp.server.schema.json`); the `mcp-name` marker in `README.md` matches
-the server name (both required by the registry).
+- Releases are published only by `.github/workflows/release.yml` (PyPI trusted publishing, provenance attestations), when a maintainer pushes a protected tag `vX.Y.Z` and a second maintainer approves the `pypi` environment.
+- The PyPI name is `sf-smartpangolin` (`sf-` = Smart Family); the commands are `sf-smartpangolin` and `sf-smartpangolin-mcp`. Until the first release, install from a clone (README, "Install"); `pango` on PyPI is someone else's package.
+- No other registry is published yet (npm `sf-smartpangolin-check`, Packagist, Maven Central: deferred). The names this project may use are listed in `names.json`.
+- MCP server name: `io.github.smarttasksorg/sf-smartpangolin`. `publish/server.unpublished.json` becomes `server.json` only after the PyPI release is live and verified.
+- There is no upload from a laptop: `make publish` and `scripts/publish.sh` stop with a message.
+- The step-by-step release procedure is in the maintainers' runbook.
