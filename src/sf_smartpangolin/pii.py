@@ -1,7 +1,7 @@
 """
 pii.py — opt-in PII scanning for regular text (a higher scan level).
 
-Off by default. Enable with ``pango pack --pii`` (or ``api.pack(pii=True)``) to
+Off by default. Enable with ``sf-smartpangolin pack --pii`` (or ``api.pack(pii=True)``) to
 also catch personal data in prose and docs — emails, phone numbers, US SSNs, and
 card numbers — on top of the secret rules.
 

@@ -1,7 +1,7 @@
 - id: pangolin-guard
   name: SmartPangolin secret guard
   description: Fail the commit if a staged file would leak a secret when shared.
-  entry: pango pack --dry-run --share public --root .
+  entry: sf-smartpangolin pack --dry-run --share public --root .
   language: python
   pass_filenames: false
   always_run: true

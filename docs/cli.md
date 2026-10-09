@@ -1,12 +1,12 @@
 # CLI reference
 
-`pango <command> [options]`. Bare `smartpangolin` (or `pango --root …`) is an
-alias for `pango pack`.
+`sf-smartpangolin <command> [options]`. Bare `sf-smartpangolin` (or `sf-smartpangolin --root …`) is an
+alias for `sf-smartpangolin pack`.
 
 ## pack — seal a tree
 
 ```
-pango pack --root PATH [--share public|private] [options]
+sf-smartpangolin pack --root PATH [--share public|private] [options]
 ```
 
 Selection precedence: `--files` → `file_folder_path.txt` (from stage 1, unless
@@ -27,7 +27,7 @@ Retention: `--retention-days N` (default 30) · `--retention-mb N` (default 1024
 ## verify — check a zip against its manifest
 
 ```
-pango verify ZIP
+sf-smartpangolin verify ZIP
 ```
 
 Recomputes `zip_sha256` vs the sidecar, `content_sha256` vs the manifest, every
@@ -37,7 +37,7 @@ manifest. Exit 0 = OK, 2 = problem(s).
 ## triage — read the audit records
 
 ```
-pango triage ZIP [PREFIX] [--full] [--ext] [--git]
+sf-smartpangolin triage ZIP [PREFIX] [--full] [--ext] [--git]
 ```
 
 `PREFIX` filters rule IDs (e.g. `SEC-`). `--ext` shows an extension histogram per
@@ -48,7 +48,7 @@ there. `--full` disables the 40-line truncation.
 ## tree — stage 1 only
 
 ```
-pango tree --root PATH [--focus SUB] [--path-output FILE]
+sf-smartpangolin tree --root PATH [--focus SUB] [--path-output FILE]
 ```
 
 Writes the indented tree and the flat path list the packager consumes.
@@ -56,13 +56,13 @@ Writes the indented tree and the flat path list the packager consumes.
 ## purge — retention only
 
 ```
-pango purge --root PATH [--retention-days N] [--retention-mb N] [--dry-run]
+sf-smartpangolin purge --root PATH [--retention-days N] [--retention-mb N] [--dry-run]
 ```
 
 ## policy — print the active policy
 
 ```
-pango policy [--root PATH] [--fingerprint]
+sf-smartpangolin policy [--root PATH] [--fingerprint]
 ```
 
 Full ruleset as JSON, or just the `policy_sha256` (includes `.pangolin.json`
@@ -71,7 +71,7 @@ overrides read from `--root`).
 ## init — scaffold the standard
 
 ```
-pango init --root PATH [--force]
+sf-smartpangolin init --root PATH [--force]
 ```
 
 Creates `.secret/` (git-ignored, never-shipped) and a starter `.pangolin.json`.

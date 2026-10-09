@@ -1,4 +1,4 @@
-<!-- mcp-name: io.github.smarttasksorg/smartpangolin · part of the Smart* family -->
+<!-- mcp-name: io.github.smarttasksorg/sf-smartpangolin -->
 <h1 align="center">🦔 SmartPangolin</h1>
 <p align="center"><b>Scan before you share. Stop leaking secrets into AI models, agents, and tools.</b></p>
 <p align="center">
@@ -15,16 +15,31 @@ As AI reshapes how we work, a new gap opens: feeding code/docs to ai leaks secre
 `scan` at the exact moment the gap bites, and it works the second you clone it
 (a synthetic demo ships in `demo/`).
 
-SmartPangolin is not published on PyPI yet. Until this README says otherwise, a package called `smartpangolin` (or `pango`) on any registry is not ours.
+## Install
+
+SmartPangolin is not published on PyPI or any other package registry yet. Until
+this section says otherwise, a package called `sf-smartpangolin` on any registry
+is not ours, and neither is `smartpangolin`. The PyPI package `pango` is a placeholder published by someone else; it is not this tool.
+
+Install from a clone (Python 3.8 or later):
 
 ```bash
-git clone https://github.com/SmartTasksOrg/smartpangolin
-cd smartpangolin
+git clone https://github.com/SmartTasksOrg/sf-smartpangolin
+cd sf-smartpangolin
 python -m venv .venv
 . .venv/bin/activate          # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install .
-smartpangolin --demo        # run against the bundled demo
+sf-smartpangolin --demo
 ```
+
+## Status
+
+- **Version 3.0.0, experimental.** A deterministic secret-scanning packager with 31 tests, including red-team regression cases; [SECURITY.md](SECURITY.md#detection-scope--limitations-be-honest-with-yourself) lists what it does not detect.
+- **Published:** nowhere yet; install from a clone (above).
+- **Tested:** lint, the 31 tests and a `sf-smartpangolin pack` dry run on Linux, Windows and macOS with Python 3.8, 3.10 and 3.12, on every push to master and every pull request (`.github/workflows/ci.yml`).
+- **Not tested:** Python 3.9, 3.11 and 3.13.
+- **Ports:** Go, Java, Node and PHP ports in `ports/` are checked against the Python reference by `ports/conformance/run.sh` (run by hand, not in CI); they are not published on any registry.
+- **Security review:** none independent. Report vulnerabilities as described in [SECURITY.md](SECURITY.md).
 
 ## Run it in your stack
 
@@ -38,13 +53,13 @@ smartpangolin --demo        # run against the bundled demo
 
 ## What's in this repo
 
-- **Core engine** — [`src/smartpangolin/`](src/smartpangolin/): scan() -> ScanResult. Deterministic, dependency-free.
-- **CLI** — `pango pack | verify | triage | tree | purge | policy | init`, the full fail-closed packager. `smartpangolin --demo` runs the quick demo; the family `scan()` API is the lightweight scanner.
+- **Core engine** — [`src/sf_smartpangolin/`](src/sf_smartpangolin/): scan() -> ScanResult. Deterministic, dependency-free.
+- **CLI** — `sf-smartpangolin pack | verify | triage | tree | purge | policy | init`, the full fail-closed packager. `sf-smartpangolin --demo` runs the quick demo; the family `scan()` API is the lightweight scanner.
 - **Language ports** — [`ports/`](ports/): native Go, Java, Node, PHP implementations that reproduce the Python reference, with a shared conformance harness.
 - **Integration kits** — [`kits/`](kits/): LangChain, LlamaIndex, function-calling, MCP, CI, and pre-commit starters.
 - **Adapters** — [`adapters/`](adapters/): GitHub Action and language adapters.
 - **Framework integrations** — [`integrations/`](integrations/): Flowise, VS Code extension — each a thin wrapper over one `adapter.py` bound to the core.
-- **MCP server** — `smartpangolin-mcp` console script, for agentic/AI-coding clients.
+- **MCP server** — `sf-smartpangolin-mcp` console script, for agentic/AI-coding clients.
 - **Reference docs** — [`docs/`](docs/): 10 documents (CLI, policy, design, FAQ, porting…).
 - **Also included** — a runnable [`demo/`](demo/), [`examples/`](examples/), the IAIso mapping [`spec/iaiso-map.json`](spec/iaiso-map.json), a browser [`site/playground.html`](site/playground.html), plus public smoke tests in `tests/`.
 
@@ -55,7 +70,7 @@ Rule IDs are namespaced `SEC-*` so output looks kin to the rest of the family
 
 ### The data objects (UML)
 
-These are real dataclasses in [`src/smartpangolin/models.py`](src/smartpangolin/models.py) — the
+These are real dataclasses in [`src/sf_smartpangolin/models.py`](src/sf_smartpangolin/models.py) — the
 diagram and the code are the same thing:
 
 ```mermaid
@@ -152,14 +167,14 @@ all aligned to the [IAIso standard](https://github.com/SmartTasksOrg/IAIso). Eac
 
 | Tool | IAIso | What it does |
 |---|---|---|
-| [SmartPrompt](https://github.com/SmartTasksOrg/smartprompt) | §4 · Context | Lint before you send. Bad prompt in, bad work out — and it's your name on it. |
-| [SmartCheck](https://github.com/SmartTasksOrg/smartcheck) | §2 · Verification | Check before you sign off. Catch the AI when it's confidently wrong. |
-| [SmartSeal](https://github.com/SmartTasksOrg/smartseal) | §3 · Provenance | Seal what you ship. A signed receipt so anyone can verify what they received. |
-| [SmartStandard](https://github.com/SmartTasksOrg/smartstandard) | §7 · Standards | Standardize before you scale. One shared, auditable convention for AI-assisted work. |
-| [SmartSim](https://github.com/SmartTasksOrg/smartsim) | §8 · Foresight | Simulate before it hits you. See your role's task-by-task collapse sequence. |
-| [SmartMoat](https://github.com/SmartTasksOrg/smartmoat) | §6 · Workforce | Know your moat. Score the tasks AI can't easily take — and widen them. |
-| [SmartRoute](https://github.com/SmartTasksOrg/smartroute) | §5 · Orchestration | Route only what you trust. Gate agents and tools with trust scores and guardrails. |
-| [SmartFeed](https://github.com/SmartTasksOrg/smartfeed) | §9 · Awareness | Distill the firehose. A tight brief of only what moves your work. |
+| [SmartPrompt](https://github.com/SmartTasksOrg/sf-smartprompt) | §4 · Context | Lint before you send. Bad prompt in, bad work out — and it's your name on it. |
+| [SmartCheck](https://github.com/SmartTasksOrg/sf-smartcheck) | §2 · Verification | Check before you sign off. Catch the AI when it's confidently wrong. |
+| [SmartSeal](https://github.com/SmartTasksOrg/sf-smartseal) | §3 · Provenance | Seal what you ship. A signed receipt so anyone can verify what they received. |
+| [SmartStandard](https://github.com/SmartTasksOrg/sf-smartstandard) | §7 · Standards | Standardize before you scale. One shared, auditable convention for AI-assisted work. |
+| [SmartSim](https://github.com/SmartTasksOrg/sf-smartsim) | §8 · Foresight | Simulate before it hits you. See your role's task-by-task collapse sequence. |
+| [SmartMoat](https://github.com/SmartTasksOrg/sf-smartmoat) | §6 · Workforce | Know your moat. Score the tasks AI can't easily take — and widen them. |
+| [SmartRoute](https://github.com/SmartTasksOrg/sf-smartroute) | §5 · Orchestration | Route only what you trust. Gate agents and tools with trust scores and guardrails. |
+| [SmartFeed](https://github.com/SmartTasksOrg/sf-smartfeed) | §9 · Awareness | Distill the firehose. A tight brief of only what moves your work. |
 
 **Backed by the standard:** SmartPangolin implements **IAIso §1 · Secure Sharing**.
 **Open-source edition:** this repo is the simplified, single-purpose version, built for any org to integrate into its own architecture. SmartTasks' desktop app and [SmartTasks.cloud](https://smarttasks.cloud) run a more advanced, deeply-integrated implementation of the same IAIso governance — a separate product, not this code bundled.

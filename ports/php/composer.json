@@ -9,10 +9,10 @@
     "gitignore",
     "ci",
     "llm",
-    "smartpangolin",
+    "sf-smartpangolin",
     "pangolin"
   ],
-  "homepage": "https://github.com/SmartTasksOrg/smartpangolin",
+  "homepage": "https://github.com/SmartTasksOrg/sf-smartpangolin",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -29,7 +29,7 @@
     "pangolin-check.php"
   ],
   "support": {
-    "issues": "https://github.com/SmartTasksOrg/smartpangolin/issues",
-    "source": "https://github.com/SmartTasksOrg/smartpangolin/tree/main/ports/php"
+    "issues": "https://github.com/SmartTasksOrg/sf-smartpangolin/issues",
+    "source": "https://github.com/SmartTasksOrg/sf-smartpangolin/tree/main/ports/php"
   }
 }

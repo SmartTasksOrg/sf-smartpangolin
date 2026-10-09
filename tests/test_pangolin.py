@@ -4,8 +4,8 @@ import zipfile
 
 import pytest
 
-from smartpangolin import engine, pack, policy_fingerprint, verify_zip
-from smartpangolin.triage import triage
+from sf_smartpangolin import engine, pack, policy_fingerprint, verify_zip
+from sf_smartpangolin.triage import triage
 
 HF = "hf_" + "A" * 34               # format-valid, fake
 GHP = "ghp_" + "0" * 36

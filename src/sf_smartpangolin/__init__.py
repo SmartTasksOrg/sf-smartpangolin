@@ -7,15 +7,15 @@ proof of exactly what went in and what did not. Secrets are always excluded;
 
 Quick start (Python)::
 
-    from smartpangolin import pack
+    from sf_smartpangolin import pack
     result = pack("./my_project", share="public")
     print(result.zip_path, result.content_sha256)
 
 Quick start (CLI)::
 
-    smartpangolin pack --root ./my_project --share public
-    smartpangolin verify <zip>
-    smartpangolin triage <zip> --git
+    sf-smartpangolin pack --root ./my_project --share public
+    sf-smartpangolin verify <zip>
+    sf-smartpangolin triage <zip> --git
 
 Part of the SmartTasks / IAIso ecosystem. See docs/ecosystem.md.
 """

@@ -10,4 +10,4 @@ if (-not (Select-String -Path .gitignore -Pattern "SmartPangolin standardized se
   Write-Host "  + appended secret locations to .gitignore"
 }
 Write-Host "  + created .secret\{local,ci,data} and .pangolin.json"
-Write-Host "Done. Move sensitive files into .secret\ and run:  pango pack --dry-run"
+Write-Host "Done. Move sensitive files into .secret\ and run:  sf-smartpangolin pack --dry-run"

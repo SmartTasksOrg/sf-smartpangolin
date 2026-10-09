@@ -33,7 +33,7 @@ jobs:
       - name: Tests
         run: python -m pytest -q
       - name: Self-seal (dogfood)
-        run: pango pack --root . --share public --dry-run --debug
+        run: sf-smartpangolin pack --root . --share public --dry-run --debug
 
   install-lines:
     runs-on: ubuntu-latest

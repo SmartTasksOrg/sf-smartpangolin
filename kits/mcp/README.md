@@ -6,9 +6,9 @@ MCP-speaking AI coding tool. Tools exposed: `pangolin_scan` (dry-run report) and
 
 ```bash
 # SmartPangolin is not on PyPI yet: install it from a clone
-git clone https://github.com/SmartTasksOrg/smartpangolin
-cd smartpangolin
-python -m pip install .              # provides the `smartpangolin-mcp` command
+git clone https://github.com/SmartTasksOrg/sf-smartpangolin
+cd sf-smartpangolin
+python -m pip install .              # provides the `sf-smartpangolin-mcp` command
 ```
 
 Register it (same JSON shape works for **Claude Desktop, Cursor, Cline, Windsurf,
@@ -18,7 +18,7 @@ Zed, Continue**):
 {
   "mcpServers": {
     "pangolin": {
-      "command": "smartpangolin-mcp"
+      "command": "sf-smartpangolin-mcp"
     }
   }
 }

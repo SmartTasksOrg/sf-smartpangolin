@@ -7,8 +7,8 @@ Python tool into your `package.json`:
 ```json
 {
   "scripts": {
-    "seal": "pango pack --root . --share public",
-    "prepublishOnly": "pango pack --root . --share public --dry-run --debug"
+    "seal": "sf-smartpangolin pack --root . --share public",
+    "prepublishOnly": "sf-smartpangolin pack --root . --share public --dry-run --debug"
   }
 }
 ```
@@ -27,7 +27,7 @@ console.log(manifest.share_mode, manifest.file_count, manifest.content_sha256.sl
 ## Port the scanner (roadmap)
 
 JS regex lacks RE2 guarantees; keep the anchored patterns from
-`pango policy` and test them against the fixtures in `tests/`. The hashing
+`sf-smartpangolin policy` and test them against the fixtures in `tests/`. The hashing
 recipe (`content_sha256`) is in [../../docs/porting.md](../../docs/porting.md).
 
 > **Update:** a real, conformance-tested native port now lives in `ports/node/`.

@@ -1,6 +1,6 @@
 pangolin:
   image: python:3-slim
   script:
-    # pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
-    - python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
-    - pango pack --dry-run --share public --root .
+    # pinned to the release tag v3.0.0 (it exists after the first release); sf-smartpangolin is not on PyPI yet
+    - python -m pip install "git+https://github.com/SmartTasksOrg/sf-smartpangolin@v3.0.0"
+    - sf-smartpangolin pack --dry-run --share public --root .

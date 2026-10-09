@@ -28,7 +28,7 @@ your-repo/
 Scaffold it:
 
 ```bash
-pango init --root .
+sf-smartpangolin init --root .
 ```
 
 `init` creates `.secret/` with a `*`-ignoring `.gitignore` and writes a starter

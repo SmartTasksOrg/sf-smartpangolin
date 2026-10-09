@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.smarttasksorg/smartpangolin",
+  "name": "io.github.smarttasksorg/sf-smartpangolin",
   "description": "Scan a repo for secrets in paths and content; honour .gitignore before sharing with an LLM.",
   "version": "3.0.0",
   "repository": {
-    "url": "https://github.com/SmartTasksOrg/smartpangolin",
+    "url": "https://github.com/SmartTasksOrg/sf-smartpangolin",
     "source": "github"
   },
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
-      "identifier": "smartpangolin",
+      "identifier": "sf-smartpangolin",
       "version": "3.0.0",
       "transport": {
         "type": "stdio"
@@ -21,8 +21,8 @@
   ],
   "_meta": {
     "io.modelcontextprotocol.registry/publisher-provided": {
-      "command": "smartpangolin-mcp",
-      "note": "After installing SmartPangolin (README, Install), run `smartpangolin-mcp` (stdio)."
+      "command": "sf-smartpangolin-mcp",
+      "note": "After installing SmartPangolin (README, Install), run `sf-smartpangolin-mcp` (stdio)."
     }
   }
 }

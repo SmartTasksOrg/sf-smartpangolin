@@ -4,7 +4,7 @@ Secrets are always scanned. **PII scanning is off by default** — it catches
 personal data in ordinary prose, which is noisier, so you turn it on when you
 want it:
 
-    pango pack --pii --dry-run          # report docs that contain PII
+    sf-smartpangolin pack --pii --dry-run          # report docs that contain PII
     # or in .pangolin.json:  { "pii": true }
 
 ## What it finds
@@ -31,7 +31,7 @@ Both fold into the auditable `policy_sha256`.
 ## Redaction (clean instead of withhold)
 To scrub a document rather than drop it, use the API:
 
-    from smartpangolin.pii import redact_pii
+    from sf_smartpangolin.pii import redact_pii
     clean = redact_pii(open("doc.md").read())   # emails -> [EMAIL], etc.
 
 ## Scope

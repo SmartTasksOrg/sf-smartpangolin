@@ -12,7 +12,7 @@ ALL PORTS CONFORMANT (incl. PII)  # node/go/java/php
 
 ## What the ports intentionally do NOT do (use the Python tool for these)
 - **Sealing.** Ports classify; they do not build the share zip, the signed
-  manifest, the two hashes, or the audit ledger. `pango` is the reference for the
+  manifest, the two hashes, or the audit ledger. `sf-smartpangolin` is the reference for the
   actual artifact.
 - **Operational rules.** Ports skip `OPS-OVERSIZE` (huge files) and the
   binary-safe-extension allowance. Ports are **fail-closed on binaries**: any file

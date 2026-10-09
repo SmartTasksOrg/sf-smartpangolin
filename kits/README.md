@@ -35,7 +35,7 @@ so an agent or hook can refuse. Nothing is written unless you call `pangolin_pac
 
 ```python
 # the guard, in three lines, anywhere:
-from smartpangolin import api
+from sf_smartpangolin import api
 r = api.pack(".", share="public", dry_run=True)
 assert not any(k.startswith("SEC-") for k in r.exclusions["by_rule"]), "secrets present"
 ```
