@@ -1,14 +1,20 @@
 {
   "schema": 1,
-  "repo": "SmartTasksOrg/smartpangolin",
+  "repo": "SmartTasksOrg/sf-smartpangolin",
   "checked_on": "2026-10-08",
   "names": [
     {
       "registry": "pypi",
-      "name": "smartpangolin",
+      "name": "sf-smartpangolin",
       "registered": false,
       "workflow": "release.yml",
       "note": "first release pending; README in state A"
+    },
+    {
+      "registry": "pypi",
+      "name": "smartpangolin",
+      "registered": false,
+      "note": "not used by the family: packages are published as sf-<name>; never install this name"
     },
     {
       "registry": "pypi",
@@ -39,7 +45,7 @@
     },
     {
       "registry": "mcp",
-      "name": "io.github.smarttasksorg/smartpangolin",
+      "name": "io.github.smarttasksorg/sf-smartpangolin",
       "registered": false
     }
   ],

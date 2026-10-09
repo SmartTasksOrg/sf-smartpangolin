@@ -12,8 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from smartpangolin import engine as E  # noqa: E402
-from smartpangolin import pii as _P  # noqa: E402
+from sf_smartpangolin import engine as E  # noqa: E402
+from sf_smartpangolin import pii as _P  # noqa: E402
 
 
 def _pii_rules():

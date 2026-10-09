@@ -1,5 +1,5 @@
 """Opt-in PII scanning: detection, author-tag skip, allow-list, redaction, pack."""
-from smartpangolin import pii, api
+from sf_smartpangolin import pii, api
 
 
 DOC = ("# Guide\n\nContact support at help@acme.com or call 415-555-0199.\n"

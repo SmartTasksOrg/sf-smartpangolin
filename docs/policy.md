@@ -4,8 +4,8 @@ The policy is a flat set of rules, each with a stable ID that appears verbatim i
 `EXCLUSIONS.json`. Dump the live policy any time:
 
 ```bash
-pango policy                 # full ruleset as JSON
-pango policy --fingerprint   # just the sha256 (includes any .pangolin.json overrides)
+sf-smartpangolin policy                 # full ruleset as JSON
+sf-smartpangolin policy --fingerprint   # just the sha256 (includes any .pangolin.json overrides)
 ```
 
 ## Families
@@ -84,7 +84,7 @@ given share. **Bump `POLICY_VERSION` when you edit**, and add a test.
 Common adjustments:
 
 - **`SEC-PATH-DBDUMP`** globs `*.sql`. In an app repo full of SQL migrations this
-  over-fires. Check with `pango triage <zip> SEC-PATH-DBDUMP --ext`; if it is
+  over-fires. Check with `sf-smartpangolin triage <zip> SEC-PATH-DBDUMP --ext`; if it is
   mostly `.sql`, drop that glob (or `allow` the migration dir).
 - **`LOC-NIXUSER`** skips `runner`, `user`, `ubuntu` as generic CI usernames. Add
   your own non-sensitive service accounts.
@@ -102,7 +102,7 @@ ignore files, `!` negation, anchored `/`, directory-only `dir/`, and `**`).
 Anything git already ignores is excluded and reported under `OPS-GITIGNORE`.
 
 Controls:
-- `pango pack --no-gitignore` — ignore the ignore file.
+- `sf-smartpangolin pack --no-gitignore` — ignore the ignore file.
 - `.pangolin.json`: `"respect_gitignore": false` to disable; `"ignore_files":
   [".dockerignore"]` to honour additional ignore files.
 - Force a specific ignored file back in with `allow`; it is recorded as an

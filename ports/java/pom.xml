@@ -11,7 +11,7 @@
 
   <name>pangolin-check</name>
   <description>Native Java port of SmartPangolin: scan a tree for secrets in filenames and content and honour .gitignore before sharing code externally or with an LLM. No dependencies.</description>
-  <url>https://github.com/SmartTasksOrg/smartpangolin</url>
+  <url>https://github.com/SmartTasksOrg/sf-smartpangolin</url>
 
   <licenses>
     <license>
@@ -26,9 +26,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:https://github.com/SmartTasksOrg/smartpangolin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/SmartTasksOrg/smartpangolin.git</developerConnection>
-    <url>https://github.com/SmartTasksOrg/smartpangolin/tree/main/ports/java</url>
+    <connection>scm:git:https://github.com/SmartTasksOrg/sf-smartpangolin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/SmartTasksOrg/sf-smartpangolin.git</developerConnection>
+    <url>https://github.com/SmartTasksOrg/sf-smartpangolin/tree/main/ports/java</url>
   </scm>
 
   <properties>

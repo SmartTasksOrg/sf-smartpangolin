@@ -1,15 +1,15 @@
 [build-system]
-requires = ["hatchling>=1.21"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "smartpangolin"
+name = "sf-smartpangolin"
 dynamic = ["version"]
 description = "Deterministic, fail-closed, auditable secret-scrubbing packager for sharing code and data with LLMs and third parties."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "Apache-2.0"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "NOTICE"]
 authors = [{name = "Roen Branham"}, {name = "Le Thanh"}]
 keywords = [
     "secrets", "security", "redaction", "share", "llm", "context",
@@ -17,13 +17,12 @@ keywords = [
     "smarttasks", "iaiso",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Console",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -46,28 +45,29 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/SmartTasksOrg/smartpangolin"
-Documentation = "https://github.com/SmartTasksOrg/smartpangolin/tree/main/docs"
-Repository = "https://github.com/SmartTasksOrg/smartpangolin"
-Issues = "https://github.com/SmartTasksOrg/smartpangolin/issues"
+Homepage = "https://github.com/SmartTasksOrg/sf-smartpangolin"
+Source = "https://github.com/SmartTasksOrg/sf-smartpangolin"
+Issues = "https://github.com/SmartTasksOrg/sf-smartpangolin/issues"
+Security = "https://github.com/SmartTasksOrg/sf-smartpangolin/security/policy"
+Changelog = "https://github.com/SmartTasksOrg/sf-smartpangolin/blob/master/CHANGELOG.md"
+Documentation = "https://github.com/SmartTasksOrg/sf-smartpangolin/tree/master/docs"
 "SmartTasks (data fabric)" = "https://smarttasks.cloud"
 "IAIso (control framework)" = "https://iaiso.org"
 "Model repacks (Hugging Face)" = "https://huggingface.co/smarttasks"
 
 [project.scripts]
-pango = "smartpangolin.cli:main"
-smartpangolin = "smartpangolin.cli:main"
-smartpangolin-mcp = "smartpangolin.mcp:main"
+sf-smartpangolin = "sf_smartpangolin.cli:main"
+sf-smartpangolin-mcp = "sf_smartpangolin.mcp:main"
 
 [tool.hatch.version]
-path = "src/smartpangolin/_version.py"
+path = "src/sf_smartpangolin/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/smartpangolin"]
+packages = ["src/sf_smartpangolin"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "src/smartpangolin",
+    "src/sf_smartpangolin",
     "docs",
     "examples",
     "adapters",

@@ -6,7 +6,7 @@ Bedrock, or your own agent. `TOOLS_OPENAI` / `TOOLS_ANTHROPIC` are the schemas t
 advertise; `dispatch(name, args)` runs the call and returns a string result.
 """
 import json
-from smartpangolin import api
+from sf_smartpangolin import api
 
 _PARAMS = {
     "type": "object",

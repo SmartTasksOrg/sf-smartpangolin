@@ -3,7 +3,7 @@
   "allow": [
     "README.md",
     "docs/policy.md",
-    "src/smartpangolin/engine.py",
+    "src/sf_smartpangolin/engine.py",
     "tests/test_pangolin.py"
   ]
 }

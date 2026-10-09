@@ -25,3 +25,33 @@ file_folder_path.txt
 !.secret/.gitignore
 # ...except the intentional demo fixture that the scanner demo relies on:
 !demo/repo/.env
+
+# secrets and credentials never belong in the repository
+.secure/
+secrets.env
+*.env
+.env.*
+!.env.example
+.npmrc
+.pypirc
+.netrc
+_netrc
+id_rsa*
+id_ed25519*
+*.key
+*.pem
+*.p12
+*.pfx
+
+# port build output
+*.class
+ports/java/out/
+ports/go/pangolin-check
+ports/go/pangolincheck
+
+# test and demo fixtures (fake values) that are tracked on purpose
+!demo/repo/.env
+!demo/repo/deploy/id_rsa
+
+# binary from `go build` in ports/go (the module path ends in /go)
+ports/go/go

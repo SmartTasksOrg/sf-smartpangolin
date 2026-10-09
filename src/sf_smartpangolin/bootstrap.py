@@ -1,5 +1,5 @@
 """
-smartpangolin.bootstrap — optional venv re-exec.
+sf_smartpangolin.bootstrap — optional venv re-exec.
 
 SmartPangolin is stdlib-only, so a venv is never strictly required. But the
 surrounding pipeline (stage 1/2, git) often runs inside one (.venv / venv /
@@ -55,7 +55,7 @@ def maybe_reexec_in_venv(root: Path, explicit: str, debug: bool = False):
             return
         env = dict(os.environ, **{_BOOTSTRAP_FLAG: "1"})
         print(f"[venv] re-exec under {py}")
-        os.execve(str(py), [str(py), "-m", "smartpangolin"] + sys.argv[1:], env)
+        os.execve(str(py), [str(py), "-m", "sf-smartpangolin"] + sys.argv[1:], env)
 
     if explicit not in ("auto", "none"):
         print(f"[venv] WARNING: no interpreter found in '{explicit}', "

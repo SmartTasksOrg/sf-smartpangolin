@@ -1,5 +1,5 @@
 """
-smartpangolin.triage — read _SHARE/EXCLUSIONS.json out of a share zip.
+sf_smartpangolin.triage — read _SHARE/EXCLUSIONS.json out of a share zip.
 
 Prints paths and rule IDs only. Matched secret values are never stored in the
 zip, so they cannot be printed here either.

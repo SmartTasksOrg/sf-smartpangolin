@@ -14,15 +14,15 @@
 SmartPangolin is not on PyPI yet; install from a clone (README, "Install").
 
 ```bash
-git clone https://github.com/SmartTasksOrg/smartpangolin
-cd smartpangolin
+git clone https://github.com/SmartTasksOrg/sf-smartpangolin
+cd sf-smartpangolin
 python -m venv .venv
 . .venv/bin/activate          # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install .
-pango init --root .                      # scaffold the .secret standard
-pango pack --root . --share public       # seal for a third party
-pango verify <zip>                        # prove integrity
-pango triage <zip> --git                  # what did git track that didn't ship?
+sf-smartpangolin init --root .                      # scaffold the .secret standard
+sf-smartpangolin pack --root . --share public       # seal for a third party
+sf-smartpangolin verify <zip>                        # prove integrity
+sf-smartpangolin triage <zip> --git                  # what did git track that didn't ship?
 ```
 
 SmartPangolin is stdlib-only (Python 3.8+, zero runtime dependencies) and every share

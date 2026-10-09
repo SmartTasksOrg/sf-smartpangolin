@@ -13,4 +13,4 @@ Write-Host "[bootstrap] installing SmartPangolin (editable, dev extras)"
 pip install -e ".[dev]"
 Write-Host ""
 Write-Host "[bootstrap] done. Activate with:  $venv\Scripts\Activate.ps1"
-pango --version
+sf-smartpangolin --version

@@ -5,9 +5,9 @@ jobs:
   pangolin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1, read 2026-10-08
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0, read 2026-10-08
         with: { python-version: "3.x" }
-      # pinned to a commit: smartpangolin is not on PyPI yet; replace with a release tag
-      - run: python -m pip install "git+https://github.com/SmartTasksOrg/smartpangolin@67b5acef78ee92255c8613b61e26fa3ab72079e5"
-      - run: pango pack --dry-run --share public --root .
+      # pinned to the release tag v3.0.0 (it exists after the first release); sf-smartpangolin is not on PyPI yet
+      - run: python -m pip install "git+https://github.com/SmartTasksOrg/sf-smartpangolin@v3.0.0"
+      - run: sf-smartpangolin pack --dry-run --share public --root .
