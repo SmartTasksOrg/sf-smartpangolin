@@ -22,8 +22,8 @@ runs:
       env:
         PKG: ${{ inputs.version }}
       run: |
-        # Never install by name: "smartpangolin" is not on PyPI yet, and PyPI
-        # "pango" is someone else's placeholder package.
+        # Installs from this action's own checkout, i.e. the version you pinned in
+        # `uses:`. Never by the name "smartpangolin" (without sf-) or "pango": neither is ours.
         if [ -z "$PKG" ]; then
           PKG="$GITHUB_ACTION_PATH/../.."
           if [ ! -f "$PKG/pyproject.toml" ]; then

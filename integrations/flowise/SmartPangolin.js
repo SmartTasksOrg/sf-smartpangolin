@@ -1,7 +1,7 @@
 // Flowise custom node for SmartPangolin (IAIso governance).
 // Copy this folder into Flowise's components/nodes/ (or load as a custom tool).
 // It shells out to the shipped adapter.py, so sf-smartpangolin must be importable
-// (install SmartPangolin from a clone: python -m pip install . ; it is not on PyPI yet)
+// (python -m pip install sf-smartpangolin)
 // or PYTHONPATH set to the repo src/.
 const path = require('path');
 const { spawnSync } = require('child_process');

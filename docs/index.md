@@ -11,7 +11,7 @@
 
 ## 30-second tour
 
-SmartPangolin is not on PyPI yet; install from a clone (README, "Install").
+Install: `python -m pip install sf-smartpangolin` (README, "Install").
 
 ```bash
 git clone https://github.com/SmartTasksOrg/sf-smartpangolin

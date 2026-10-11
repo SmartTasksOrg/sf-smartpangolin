@@ -2,7 +2,7 @@
 ```yaml
 repos:
   - repo: https://github.com/SmartTasksOrg/sf-smartpangolin
-    rev: v3.0.0  # the tag v3.0.0 exists only after the first release
+    rev: v3.0.0
     hooks:
       - id: pangolin-guard
 ```
