@@ -17,11 +17,23 @@ As AI reshapes how we work, a new gap opens: feeding code/docs to ai leaks secre
 
 ## Install
 
-SmartPangolin is not published on PyPI or any other package registry yet. Until
-this section says otherwise, a package called `sf-smartpangolin` on any registry
-is not ours, and neither is `smartpangolin`. The PyPI package `pango` is a placeholder published by someone else; it is not this tool.
+```bash
+python -m pip install sf-smartpangolin
+sf-smartpangolin --demo
+```
 
-Install from a clone (Python 3.8 or later):
+Every file of `sf-smartpangolin` on PyPI is built and published by this repository's release
+workflow (`.github/workflows/release.yml`, PyPI trusted publishing) and carries a
+provenance attestation that names this repository and that workflow; PyPI shows
+it under "Verified details". The same workflow records a GitHub attestation for
+the same files, which you can check with
+`gh attestation verify <file> --repo SmartTasksOrg/sf-smartpangolin`. A release file without
+that provenance is not ours, and neither is a package called `smartpangolin` (without
+`sf-`) on any registry. The PyPI package `pango` is a placeholder published by someone else; it is not this tool.
+
+Version 3.0.0 (published 2026-10-09) is the first release under this name.
+
+To install from a clone instead (Python 3.8 or later):
 
 ```bash
 git clone https://github.com/SmartTasksOrg/sf-smartpangolin
@@ -35,7 +47,7 @@ sf-smartpangolin --demo
 ## Status
 
 - **Version 3.0.0, experimental.** A deterministic secret-scanning packager with 31 tests, including red-team regression cases; [SECURITY.md](SECURITY.md#detection-scope--limitations-be-honest-with-yourself) lists what it does not detect.
-- **Published:** nowhere yet; install from a clone (above).
+- **Published:** PyPI `sf-smartpangolin` (see Install). Nothing else is published.
 - **Tested:** lint, the 31 tests and a `sf-smartpangolin pack` dry run on Linux, Windows and macOS with Python 3.8, 3.10 and 3.12, on every push to master and every pull request (`.github/workflows/ci.yml`).
 - **Not tested:** Python 3.9, 3.11 and 3.13.
 - **Ports:** Go, Java, Node and PHP ports in `ports/` are checked against the Python reference by `ports/conformance/run.sh` (run by hand, not in CI); they are not published on any registry.
@@ -45,7 +57,7 @@ sf-smartpangolin --demo
 
 | Where you work | How you run it |
 |---|---|
-| **Python** | from a clone: `python -m pip install .` (not on PyPI yet) |
+| **Python** | `python -m pip install sf-smartpangolin` |
 | **Go · Java · Node · PHP** | native ports in [`ports/`](ports/), each verified against the Python reference by [`ports/conformance/run.sh`](ports/conformance/run.sh) |
 | **LangChain · LlamaIndex · function-calling · MCP** | drop-in integration kits in [`kits/`](kits/) |
 | **Flowise · VS Code** | ready-made wrappers in [`integrations/`](integrations/), all calling one `adapter.py` |
@@ -162,7 +174,7 @@ Open [`site/playground.html`](site/playground.html) for the interactive version.
 
 ## Part of the Smart* family
 
-One system, not nine projects — same mascot, same manifesto voice, same rule-ID style,
+One system, not separate projects — same mascot, same manifesto voice, same rule-ID style,
 all aligned to the [IAIso standard](https://github.com/SmartTasksOrg/IAIso). Each is an independent, open-source, single-purpose tool you can integrate into your own architecture:
 
 | Tool | IAIso | What it does |
@@ -175,6 +187,8 @@ all aligned to the [IAIso standard](https://github.com/SmartTasksOrg/IAIso). Eac
 | [SmartMoat](https://github.com/SmartTasksOrg/sf-smartmoat) | §6 · Workforce | Know your moat. Score the tasks AI can't easily take — and widen them. |
 | [SmartRoute](https://github.com/SmartTasksOrg/sf-smartroute) | §5 · Orchestration | Route only what you trust. Gate agents and tools with trust scores and guardrails. |
 | [SmartFeed](https://github.com/SmartTasksOrg/sf-smartfeed) | §9 · Awareness | Distill the firehose. A tight brief of only what moves your work. |
+
+Also in the family: [SmartDelegate](https://github.com/SmartTasksOrg/sf-smartdelegate) (IAM for LLM agents: one role for one task), [SmartFabric](https://github.com/SmartTasksOrg/sf-smartfabric) (the IAIso Fabric Protocol reference implementation), [SmartLLMCost](https://github.com/SmartTasksOrg/sf-smartllmcost) (dollars per successful task across models) and [SmartPolicyTranslator](https://github.com/SmartTasksOrg/sf-smartpolicytranslator) (regulation text to IAIso policy files). All 13 Smart* tools are on PyPI under their `sf-` names; a package without the `sf-` prefix is not ours.
 
 **Backed by the standard:** SmartPangolin implements **IAIso §1 · Secure Sharing**.
 **Open-source edition:** this repo is the simplified, single-purpose version, built for any org to integrate into its own architecture. SmartTasks' desktop app and [SmartTasks.cloud](https://smarttasks.cloud) run a more advanced, deeply-integrated implementation of the same IAIso governance — a separate product, not this code bundled.
