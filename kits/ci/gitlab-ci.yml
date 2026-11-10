@@ -2,5 +2,5 @@ pangolin:
   image: python:3-slim
   script:
     # published only by SmartTasksOrg/sf-smartpangolin, with provenance; pin the version you reviewed
-    - python -m pip install "sf-smartpangolin==3.0.0"
+    - python -m pip install "sf-smartpangolin==3.1.0"
     - sf-smartpangolin pack --dry-run --share public --root .

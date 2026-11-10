@@ -2,7 +2,7 @@
 ```yaml
 repos:
   - repo: https://github.com/SmartTasksOrg/sf-smartpangolin
-    rev: v3.0.0
+    rev: v3.1.0
     hooks:
       - id: pangolin-guard
 ```

@@ -9,7 +9,7 @@ Add to `.pre-commit-config.yaml` (see `examples/pre-commit-config.example.yaml`)
 ```yaml
 repos:
   - repo: https://github.com/SmartTasksOrg/sf-smartpangolin
-    rev: v3.0.0
+    rev: v3.1.0
     hooks:
       - id: pangolin-guard
 ```
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1, read 2026-10-08
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0, read 2026-10-08
         with: { python-version: "3.12" }
-      - uses: SmartTasksOrg/sf-smartpangolin/adapters/github-action@v3.0.0
+      - uses: SmartTasksOrg/sf-smartpangolin/adapters/github-action@v3.1.0
         with:
           root: .
           share: public
@@ -47,7 +47,7 @@ sf-smartpangolin:
   image: python:3.12-slim
   script:
     # published only by SmartTasksOrg/sf-smartpangolin, with provenance; pin the version you reviewed
-    - python -m pip install "sf-smartpangolin==3.0.0"
+    - python -m pip install "sf-smartpangolin==3.1.0"
     - sf-smartpangolin pack --root . --share public --dry-run --debug
 ```
 
@@ -55,7 +55,7 @@ sf-smartpangolin:
 
 ```yaml
 # published only by SmartTasksOrg/sf-smartpangolin, with provenance; pin the version you reviewed
-- run: python -m pip install "sf-smartpangolin==3.0.0"
+- run: python -m pip install "sf-smartpangolin==3.1.0"
 - run: sf-smartpangolin pack --root . --share public
 - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1, read 2026-10-08
   with:

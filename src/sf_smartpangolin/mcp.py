@@ -56,6 +56,11 @@ TOOLS = [
             "properties": {
                 "root": {"type": "string", "default": "."},
                 "mode": {"type": "string", "enum": ["public", "private"], "default": "public"},
+                "format": {"type": "string", "enum": ["zip", "txt", "both"], "default": "zip",
+                           "description": "txt: merged .txt parts in a folder, for models that do not take a zip"},
+                "max_chars": {"type": "integer", "description": "most characters in one part"},
+                "max_bytes": {"type": "integer", "description": "most UTF-8 bytes in one part"},
+                "max_files": {"type": "integer", "description": "most parts; fails instead of dropping content"},
             },
         },
     },
@@ -89,10 +94,20 @@ def tool_scan(args):
 
 def tool_pack(args):
     _need_api()
-    r = api.pack(args.get("root", "."), share=args.get("mode", "public"), dry_run=False)
-    txt = (f"Sealed {r.included_count} file(s) -> {r.zip_path}\n"
+    kw = {}
+    if args.get("max_chars"):
+        kw["max_chars"] = int(args["max_chars"])
+    try:
+        r = api.pack(args.get("root", "."), share=args.get("mode", "public"), dry_run=False,
+                     fmt=args.get("format", "zip"), max_bytes=args.get("max_bytes"),
+                     max_files=args.get("max_files"), **kw)
+    except api.engine.ShardLimitError as e:
+        return f"Not written: {e}", True
+    where = r.txt_dir if r.txt_dir is not None else r.zip_path
+    txt = (f"Sealed {r.included_count} file(s) -> {where}\n"
            f"  content_sha256: {r.content_sha256}\n"
            f"  zip_sha256    : {r.zip_sha256}\n"
+           f"  parts         : {r.manifest['merged']['shard_count']}\n"
            f"  withheld      : {r.excluded_count}")
     return txt, False
 
