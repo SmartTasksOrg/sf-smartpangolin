@@ -19,6 +19,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.8', '3.10', '3.12']
+        exclude:
+          # ubuntu-latest is Ubuntu 26.04 since 2026-10-19 and setup-python has no Python 3.8 for it.
+          # 3.8 is still tested on Windows and macOS.
+          - os: ubuntu-latest
+            python-version: '3.8'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1, read 2026-10-08
         with:
