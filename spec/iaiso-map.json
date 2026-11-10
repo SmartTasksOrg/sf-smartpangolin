@@ -1,7 +1,7 @@
 {
   "tool": "SmartPangolin",
   "package": "smartpangolin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "iaiso_section": "\u00a71 \u00b7 Secure Sharing",
   "rule_prefix": "SEC-*",
   "conforms_to": "https://github.com/SmartTasksOrg/IAIso",

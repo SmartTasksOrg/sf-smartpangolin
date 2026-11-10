@@ -32,6 +32,7 @@ class PackResult:
     excluded_count: int
     overrides: List[dict] = field(default_factory=list)
     dry_run: bool = False
+    txt_dir: Optional[Path] = None      # --format txt: the folder with the parts (no zip)
 
 
 def resolve_layout(root: Path, output_folder="extracted_source",
@@ -60,8 +61,12 @@ def pack(root, *, share="public", focus=None, files=None,
          respect_gitignore=True, ignore_files=None,
          pii=False, pii_allow=None, pii_skip_author=True,
          retention_days=30, retention_mb=1024, no_purge=False,
-         config_file=engine.CONFIG_FILE, debug=False):
-    """Seal a project tree into a share zip. Returns a :class:`PackResult`."""
+         config_file=engine.CONFIG_FILE, debug=False,
+         fmt="zip", max_bytes=None, max_files=None):
+    """Seal a project tree into a share zip (``fmt="zip"``, the default), a folder of plain
+    .txt parts (``"txt"``), or both. ``max_chars``/``max_bytes`` cap every part and
+    ``max_files`` caps their number; :class:`engine.ShardLimitError` is raised, before anything
+    is written, when the content does not fit. Returns a :class:`PackResult`."""
     root = Path(root).resolve()
     if not root.is_dir():
         raise NotADirectoryError(f"--root '{root}' is not a directory")
@@ -77,6 +82,15 @@ def pack(root, *, share="public", focus=None, files=None,
     source_only = source_only or bool(ss_cfg.get("source_only", False))
     if ss_cfg.get("max_chars"):
         max_chars = ss_cfg["max_chars"]
+    if max_bytes is None and ss_cfg.get("max_bytes"):
+        max_bytes = ss_cfg["max_bytes"]
+    if max_files is None and ss_cfg.get("max_files"):
+        max_files = ss_cfg["max_files"]
+    if fmt == "zip" and ss_cfg.get("format"):
+        fmt = ss_cfg["format"]
+    if keep_txt and fmt == "zip":
+        fmt = "both"
+    keep_txt = keep_txt or fmt == "both"
     allow = list(allow or []) + list(ss_cfg.get("allow", []))
     exclude_folders = list(exclude_folders or []) + list(ss_cfg.get("exclude_folders", []))
     exclude_paths = list(exclude_paths or []) + list(ss_cfg.get("exclude_paths", []))
@@ -144,6 +158,7 @@ def pack(root, *, share="public", focus=None, files=None,
             prefix=prefix, stamp=stamp, mode=share,
             focus=(focus or "").replace(os.sep, "_").strip("_")) + ".zip"
     zip_path = arch_dir / name
+    txt_dir = arch_dir / (name[:-4] if name.lower().endswith(".zip") else name + "_txt")
 
     sde = source_date_epoch or os.environ.get("SOURCE_DATE_EPOCH")
     gen_utc = (datetime.fromtimestamp(int(sde), timezone.utc).isoformat()
@@ -184,15 +199,33 @@ def pack(root, *, share="public", focus=None, files=None,
         zip_path, included, excluded, meta, dry_run,
         merge=merge, include_raw=not merged_only, max_chars=max_chars,
         prefix=prefix, git_list=git_list, stage_dir=out_dir,
-        keep_txt=keep_txt, debug=debug)
+        keep_txt=keep_txt, debug=debug, max_bytes=max_bytes, max_files=max_files,
+        fmt=fmt, txt_dir=txt_dir)
 
     result = PackResult(
-        zip_path=None if dry_run else zip_path, zip_sha256=zip_hash,
+        zip_path=None if dry_run or fmt == "txt" else zip_path, zip_sha256=zip_hash,
+        txt_dir=txt_dir if (fmt == "txt" and not dry_run) else None,
         content_sha256=manifest["content_sha256"], manifest=manifest,
         exclusions=exclusions, report=report, included_count=manifest["file_count"],
         excluded_count=exclusions["count"], overrides=overrides, dry_run=dry_run)
 
     if dry_run:
+        return result
+
+    if fmt == "txt":
+        engine.append_history(arch_dir, {
+            "event": "share", "format": "txt", "timestamp_utc": meta["generated_utc"],
+            "txt_folder": txt_dir.name, "content_sha256": manifest["content_sha256"],
+            "share_mode": share, "policy_version": engine.POLICY_VERSION, "policy_sha256": fingerprint,
+            "tool_version": __version__, "source_root": str(root), "focus": focus,
+            "selection": selection, "included_count": manifest["file_count"],
+            "included_bytes": manifest["total_bytes"], "excluded_count": exclusions["count"],
+            "excluded_by_rule": exclusions["by_rule"],
+            "merged_shards": manifest["merged"]["shard_count"],
+            "merged_max_chars": manifest["merged"]["max_chars"],
+            "merged_max_bytes": manifest["merged"]["max_bytes"],
+            "excluded_paths": [e["path"] for e in excluded], "overrides": overrides,
+        })
         return result
 
     zip_path.with_suffix(zip_path.suffix + ".sha256").write_text(
@@ -211,6 +244,8 @@ def pack(root, *, share="public", focus=None, files=None,
         "excluded_by_rule": exclusions["by_rule"],
         "merged_shards": manifest["merged"]["shard_count"],
         "merged_max_chars": manifest["merged"]["max_chars"],
+        "merged_max_bytes": manifest["merged"]["max_bytes"],
+        "format": fmt,
         "raw_files_included": manifest["merged"]["raw_files_included"],
         "excluded_paths": [e["path"] for e in excluded], "overrides": overrides,
     })

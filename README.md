@@ -44,9 +44,23 @@ python -m pip install .
 sf-smartpangolin --demo
 ```
 
+### Text files instead of a zip
+
+The zip is the default. For a model that does not take a zip, `--format txt` writes the same content as
+plain `.txt` parts, with checksums and the share report next to them; `--format both` gives both. Limits per
+part are hard limits: a large file is split at line boundaries rather than overflowing a part.
+
+```bash
+sf-smartpangolin pack --root . --format txt --max-chars 400000 --max-files 10
+sf-smartpangolin verify extracted_source/share_archive/<name>      # checks every part
+```
+
+`--max-bytes` limits each part in bytes instead. If the share needs more parts than `--max-files`, nothing is
+written and the message says which limit would fit. All options: [docs/cli.md](docs/cli.md).
+
 ## Status
 
-- **Version 3.0.0, experimental.** A deterministic secret-scanning packager with 31 tests, including red-team regression cases; [SECURITY.md](SECURITY.md#detection-scope--limitations-be-honest-with-yourself) lists what it does not detect.
+- **Version 3.1.0, experimental.** A deterministic secret-scanning packager with 43 tests, including red-team regression cases; [SECURITY.md](SECURITY.md#detection-scope--limitations-be-honest-with-yourself) lists what it does not detect.
 - **Published:** PyPI `sf-smartpangolin` (see Install). Nothing else is published.
 - **Tested:** lint, the 31 tests and a `sf-smartpangolin pack` dry run on Linux, Windows and macOS with Python 3.8, 3.10 and 3.12, on every push to master and every pull request (`.github/workflows/ci.yml`).
 - **Not tested:** Python 3.9, 3.11 and 3.13.

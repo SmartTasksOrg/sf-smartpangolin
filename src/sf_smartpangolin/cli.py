@@ -49,7 +49,13 @@ def _add_shared(p):
     p.add_argument("--source-only", action="store_true",
                    help="Restrict selection to recognised source extensions")
     p.add_argument("--max-chars", type=int, default=3500000,
-                   help="Character ceiling per merged shard (default: %(default)s)")
+                   help="Most characters in one merged part, never exceeded: a larger file is split "
+                        "at line boundaries (default: %(default)s)")
+    p.add_argument("--max-bytes", type=int, default=None,
+                   help="Most bytes (UTF-8) in one merged part, for upload limits given in bytes")
+    p.add_argument("--max-files", type=int, default=None,
+                   help="Most merged parts. If the share needs more, nothing is written and the "
+                        "message says which --max-chars/--max-bytes would fit")
     p.add_argument("--prefix", default="", help="Prefix for generated output filenames")
     p.add_argument("--config-file", default=engine.CONFIG_FILE,
                    help="Shared patches_config.json (default: %(default)s)")
@@ -67,8 +73,13 @@ def _add_pack(p):
                         ".pangolin.json share_mode)")
     g.add_argument("--archive-dir", default="share_archive",
                    help="Zips + ledger. Relative paths resolve inside --output-folder.")
+    g.add_argument("--format", dest="fmt", choices=["zip", "txt", "both"], default="zip",
+                   help="zip (default): the sealed share zip. txt: only the merged parts as .txt "
+                        "files, with SHA256SUMS, MANIFEST.json and SHARE_REPORT.md, in a folder "
+                        "under --archive-dir (for models that do not take a zip). both: the zip and "
+                        "the .txt parts")
     g.add_argument("--keep-txt", action="store_true",
-                   help="Keep staged source_code_part*.txt after zipping")
+                   help="Keep staged source_code_part*.txt after zipping (same as --format both)")
     g.add_argument("--zip-name", help="Override the generated zip filename")
     g.add_argument("--allow", nargs="*", default=[],
                    help="Relative paths to force-include despite a rule match "
@@ -109,8 +120,8 @@ def build_parser():
 
     _add_pack(sub.add_parser("pack", help="Seal a project tree into a share zip"))
 
-    v = sub.add_parser("verify", help="Verify a share zip against its manifest")
-    v.add_argument("zip", help="Path to the share zip")
+    v = sub.add_parser("verify", help="Verify a share zip, or a --format txt folder, against its manifest")
+    v.add_argument("zip", help="Path to the share zip or the txt folder")
 
     t = sub.add_parser("triage", help="Read exclusion records out of a zip")
     t.add_argument("zip", help="Path to the share zip")
@@ -166,7 +177,8 @@ def _cmd_pack(args):
         retention_mb=args.retention_mb, no_purge=args.no_purge,
         config_file=args.config_file, debug=args.debug,
         respect_gitignore=not getattr(args, 'no_gitignore', False),
-        pii=getattr(args, 'pii', False))
+        pii=getattr(args, 'pii', False),
+        fmt=args.fmt, max_bytes=args.max_bytes, max_files=args.max_files)
 
     share = result.manifest["share_mode"]
     print(f"\n=== PANGO ({share.upper()}) ===")
@@ -180,7 +192,8 @@ def _cmd_pack(args):
         print(f"                 {rule:22} {count}")
     m = result.manifest["merged"]
     if m["enabled"]:
-        print(f"  merged     : {m['shard_count']} shard(s) @ {m['max_chars']:,} chars"
+        limit = f"{m['max_chars']:,} chars" + (f", {m['max_bytes']:,} bytes" if m.get("max_bytes") else "")
+        print(f"  merged     : {m['shard_count']} part(s), each at most {limit}"
               f"{' (merged-only)' if not m['raw_files_included'] else ''}")
     if result.manifest.get("git"):
         g = result.manifest["git"]
@@ -190,6 +203,11 @@ def _cmd_pack(args):
         print(f"  OVERRIDES  : {len(result.overrides)} (recorded in manifest + history)")
     if result.dry_run:
         print("\n  [dry-run] nothing written\n")
+        return 0
+    if result.txt_dir is not None:
+        print(f"  txt folder : {result.txt_dir}")
+        print(f"  check it   : sf-smartpangolin verify \"{result.txt_dir}\"")
+        print(f"  content    : {result.content_sha256}\n")
         return 0
     print(f"  zip        : {result.zip_path}")
     print(f"  zip sha256 : {result.zip_sha256}")
@@ -307,7 +325,11 @@ def main(argv=None):
     cmd = args.command or "pack"
 
     if cmd == "pack":
-        return _cmd_pack(args)
+        try:
+            return _cmd_pack(args)
+        except engine.ShardLimitError as e:
+            print(f"\nERROR: {e}\n", file=sys.stderr)
+            return 2
     if cmd == "verify":
         return engine.verify_zip(Path(args.zip))
     if cmd == "triage":

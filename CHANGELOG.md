@@ -3,7 +3,29 @@
 All notable changes to SmartPangolin are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versioning is semantic.
 
-## Unreleased
+## 3.1.0
+
+### Added
+- `--format txt`: the merged parts as plain `.txt` files in a folder, with `SHA256SUMS`, `MANIFEST.json` and
+  `SHARE_REPORT.md`, and no zip, for models that do not take a zip. `--format both` gives the zip and the
+  parts (`--keep-txt` does the same). The zip stays the default.
+- `--max-bytes N`: most UTF-8 bytes in one part.
+- `--max-files N`: most parts. When the share needs more, nothing is written and the error names the smallest
+  `--max-chars`/`--max-bytes` that fits.
+- `sf-smartpangolin verify FOLDER` checks a txt folder: every part against `MANIFEST.json` and `SHA256SUMS`, and
+  no unlisted `.txt` file.
+- `.pangolin.json` keys `format`, `max_bytes`, `max_files`; the MCP tool `pangolin_pack` takes the same options.
+- Every part starts with `=== part X of N: <name> ===`.
+
+### Changed
+- `--max-chars` is now a hard limit. A file larger than one part used to become a part of its own, at full size
+  (a 20,000-character limit could give a 270,000-character part); it is now split at line boundaries, and each
+  piece's header names its lines. A single line longer than a part is refused with the limit that would hold it.
+- The manifest records `format`, `max_bytes`, `max_files` and each part's size in bytes.
+
+### CI
+- Python 3.8 is no longer tested on `ubuntu-latest` (Ubuntu 26.04 has no Python 3.8 for `setup-python`); it is
+  still tested on Windows and macOS.
 
 ### Documentation
 - README "Install": `pip install sf-smartpangolin` now that the first release is on PyPI, with how to check its provenance;
@@ -12,7 +34,7 @@ All notable changes to SmartPangolin are documented here. Format follows
 - `site/playground.html`: each tool's install line now names its `sf-` package on PyPI; the README family table also lists SmartDelegate, SmartFabric, SmartLLMCost and SmartPolicyTranslator.
 - Release check: the wheel installed in a clean environment now runs the README's demo command from an empty folder, not only `--version`.
 - CI examples, kits, the GitHub Action comment, `docs/` and the Flowise node install `sf-smartpangolin` from PyPI
-  (pinned to `==3.0.0` in the CI examples) instead of from a clone or a git tag.
+  (pinned to the current version in the CI examples) instead of from a clone or a git tag.
 
 ## 3.0.0 — first PyPI release as `sf-smartpangolin` (2026-10-09)
 

@@ -400,18 +400,107 @@ def scan_content(path: Path, rules, share_mode: str, size: int):
     return hits, None
 
 
-def build_merged_shards(included, max_chars: int, prefix: str):
-    """Merge included files into character-bounded shards.
+class ShardLimitError(ValueError):
+    """The included files cannot be merged within --max-chars / --max-bytes / --max-files.
+
+    Raised before anything is written, so a share never silently loses content to a limit."""
+
+
+# Room kept free at the top of every part for its "part X of N" line.
+PART_HEADER_RESERVE = 120
+
+
+def _size(text: str, unit: str) -> int:
+    return len(text) if unit == "chars" else len(text.encode("utf-8"))
+
+
+def _pack_blocks(files, cap_chars: int, cap_bytes):
+    """Greedy packing of numbered file blocks into parts that never exceed either cap.
+
+    ``files`` is a list of (path, lang, [numbered lines]). A file larger than one part is
+    split at line boundaries; each piece says which lines it holds. Returns a list of parts
+    (each a list of strings)."""
+    def fits(chars, nbytes, add_chars, add_bytes):
+        if chars + add_chars > cap_chars:
+            return False
+        return cap_bytes is None or nbytes + add_bytes <= cap_bytes
+
+    parts, cur, cur_c, cur_b = [], [], 0, 0
+
+    def flush():
+        nonlocal cur, cur_c, cur_b
+        if cur:
+            parts.append(cur)
+        cur, cur_c, cur_b = [], 0, 0
+
+    for path, lang, lines in files:
+        body = "\n".join(lines)
+        block = f"### {path}\n```{lang}\n{body}\n```\n\n"
+        bc, bb = len(block), len(block.encode("utf-8"))
+        if fits(0, 0, bc, bb):                       # the whole file fits in one part
+            if not fits(cur_c, cur_b, bc, bb):
+                flush()
+            cur.append(block)
+            cur_c += bc
+            cur_b += bb
+            continue
+        # split at line boundaries; the piece header is sized for the widest line numbers
+        n = len(lines)
+        w = len(str(n))
+        head_len = len(f"### {path} (lines {'9' * w}-{'9' * w} of {n})\n```{lang}\n") + len("\n```\n\n")
+        head_bytes = len(f"### {path} (lines {'9' * w}-{'9' * w} of {n})\n```{lang}\n".encode("utf-8")) + len("\n```\n\n")
+        i = 0
+        while i < n:
+            if not fits(cur_c, cur_b, head_len + len(lines[i]) + 1, head_bytes + len(lines[i].encode("utf-8")) + 1):
+                if cur:
+                    flush()
+                    continue
+                raise ShardLimitError(
+                    f"{path}, line {i + 1}, is {len(lines[i]):,} characters long: a part cannot hold it. "
+                    f"Raise --max-chars/--max-bytes above {head_len + len(lines[i].encode('utf-8')) + PART_HEADER_RESERVE + 1:,}.")
+            j, used_c, used_b = i, head_len, head_bytes
+            while j < n:
+                lc, lb = len(lines[j]) + 1, len(lines[j].encode("utf-8")) + 1
+                if not fits(cur_c, cur_b, used_c + lc, used_b + lb):
+                    break
+                used_c += lc
+                used_b += lb
+                j += 1
+            piece = "\n".join(lines[i:j])
+            text = f"### {path} (lines {i + 1}-{j} of {n})\n```{lang}\n{piece}\n```\n\n"
+            cur.append(text)
+            cur_c += len(text)
+            cur_b += len(text.encode("utf-8"))
+            i = j
+            if i < n:
+                flush()
+    flush()
+    return parts
+
+
+def build_merged_shards(included, max_chars: int, prefix: str, max_bytes=None, max_files=None):
+    """Merge included files into parts that never exceed ``max_chars`` (and ``max_bytes``).
 
     CRITICAL ORDERING: this runs on the *classified* include list, never on the
     raw candidate list. Stage 2 merged before any secret check, so a .env ended
     up inlined verbatim in source_code_part1.txt — merging here instead means a
     dropped file is absent from the shards too, rather than taking the whole
     shard down with it.
-    """
-    ordered = sorted(included, key=lambda i: (i["size"], i["path"]))
-    shards, cur, cur_len = [], [], 0
 
+    Each part starts with ``=== part X of N: <name> ===``. A file larger than a part is
+    split at line boundaries, and each piece's header names its lines. When the parts
+    would be more than ``max_files``, ShardLimitError says which --max-chars would fit.
+    Nothing is dropped to meet a limit.
+    """
+    if max_chars is None or max_chars <= PART_HEADER_RESERVE:
+        raise ShardLimitError(f"--max-chars must be more than {PART_HEADER_RESERVE}")
+    if max_bytes is not None and max_bytes <= PART_HEADER_RESERVE:
+        raise ShardLimitError(f"--max-bytes must be more than {PART_HEADER_RESERVE}")
+    if max_files is not None and max_files < 1:
+        raise ShardLimitError("--max-files must be 1 or more")
+
+    ordered = sorted(included, key=lambda i: (i["size"], i["path"]))
+    files = []
     for item in ordered:
         ext = os.path.splitext(item["path"])[1].lstrip(".").lower()
         lang = LANG_MAP.get(ext, "")
@@ -419,22 +508,49 @@ def build_merged_shards(included, max_chars: int, prefix: str):
             body = item["abs"].read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
-        numbered = "\n".join(f"{str(n + 1).rjust(4)} | {line.rstrip()}"
-                              for n, line in enumerate(body.splitlines()))
-        block = f"### {item['path']}\n```{lang}\n{numbered}\n```\n\n"
+        lines = [f"{str(n + 1).rjust(4)} | {line.rstrip()}" for n, line in enumerate(body.splitlines())]
+        files.append((item["path"], lang, lines))
 
-        if cur and cur_len + len(block) > max_chars:
-            shards.append("".join(cur))
-            cur, cur_len = [], 0
-        cur.append(block)
-        cur_len += len(block)
+    cap_c = max_chars - PART_HEADER_RESERVE
+    cap_b = None if max_bytes is None else max_bytes - PART_HEADER_RESERVE
+    parts = _pack_blocks(files, cap_c, cap_b)
 
-    if cur:
-        shards.append("".join(cur))
+    if max_files is not None and len(parts) > max_files:
+        # The smallest limit that fits, found with the same packing (nothing is guessed). With
+        # --max-bytes the byte limit is searched and --max-chars stays; otherwise --max-chars.
+        def count(cap):
+            try:
+                if cap_b is None:
+                    return len(_pack_blocks(files, cap, None))
+                return len(_pack_blocks(files, cap_c, cap))
+            except ShardLimitError:
+                return max_files + 1
+        lo = cap_b if cap_b is not None else cap_c
+        hi = max(lo, sum(len(f"{p} {ln}".encode("utf-8")) + 64 for p, _, ls in files for ln in ls) + 1024)
+        if count(hi) > max_files:
+            raise ShardLimitError(
+                f"the included files need {len(parts)} parts at these limits, more than --max-files {max_files}, "
+                "and raising the byte limit alone does not help: raise --max-chars too, or narrow the share "
+                "with --focus/--files. Nothing was written.")
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if count(mid) <= max_files:
+                hi = mid
+            else:
+                lo = mid + 1
+        which = "--max-bytes" if cap_b is not None else "--max-chars"
+        raise ShardLimitError(
+            f"the included files need {len(parts)} parts at these limits, more than --max-files {max_files}. "
+            f"{which} {lo + PART_HEADER_RESERVE:,} fits them in {max_files}; or narrow the share with --focus/--files. "
+            "Nothing was written.")
 
-    width = max(2, len(str(len(shards))))
-    return [(f"_MERGED/{prefix}source_code_part{n + 1:0{width}d}.txt", text)
-            for n, text in enumerate(shards)]
+    width = max(2, len(str(len(parts))))
+    out = []
+    for n, chunks in enumerate(parts):
+        name = f"{prefix}source_code_part{n + 1:0{width}d}.txt"
+        head = f"=== part {n + 1} of {len(parts)}: {name} (sf-smartpangolin) ===\n\n"
+        out.append((f"_MERGED/{name}", head + "".join(chunks)))
+    return out
 
 
 def git_tracked(root: Path):
@@ -674,7 +790,8 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
               merge: bool = True, include_raw: bool = True,
               max_chars: int = 3500000, prefix: str = "",
               git_list=None, stage_dir: Path = None, keep_txt: bool = False,
-              debug: bool = False):
+              debug: bool = False, max_bytes=None, max_files=None, fmt: str = "zip",
+              txt_dir: Path = None):
     manifest_files = []
     for item in included:
         item["sha256"] = sha256_file(item["abs"])
@@ -736,13 +853,22 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
         "local_rules": [{"id": r, "desc": d} for r, _, d in LOCAL_RULES],
         "user_overrides": meta.get("user_policy", {}),
     }
-    merged = build_merged_shards(included, max_chars, prefix) if merge else []
+    if fmt not in ("zip", "txt", "both"):
+        raise ShardLimitError(f"--format must be zip, txt or both, not {fmt!r}")
+    if fmt == "txt":
+        if not merge:
+            raise ShardLimitError("--format txt ships the merged parts only: it cannot be combined with --no-merge")
+        include_raw = False
+    merged = build_merged_shards(included, max_chars, prefix, max_bytes, max_files) if merge else []
+    manifest["format"] = fmt
     manifest["merged"] = {
         "enabled": merge,
         "shard_count": len(merged),
         "max_chars": max_chars if merge else None,
+        "max_bytes": max_bytes if merge else None,
+        "max_files": max_files if merge else None,
         "raw_files_included": include_raw,
-        "shards": [{"path": n, "chars": len(t),
+        "shards": [{"path": n, "chars": len(t), "bytes": len(t.encode("utf-8")),
                     "sha256": hashlib.sha256(t.encode("utf-8")).hexdigest()}
                    for n, t in merged],
         "note": "Shards are built from the included set only; excluded files "
@@ -762,6 +888,10 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
     report = render_report(manifest, exclusions, meta)
 
     if dry_run:
+        return manifest, exclusions, report, None
+
+    if fmt == "txt":
+        write_txt_folder(txt_dir, merged, manifest, exclusions, report, debug)
         return manifest, exclusions, report, None
 
     zip_path.parent.mkdir(parents=True, exist_ok=True)
@@ -817,6 +947,73 @@ def write_zip(zip_path: Path, included, excluded, meta, dry_run: bool,
     return manifest, exclusions, report, sha256_file(zip_path)
 
 
+def write_txt_folder(txt_dir: Path, merged, manifest, exclusions, report, debug=False):
+    """--format txt: the merged parts as plain .txt files, for models that do not take a zip.
+
+    Next to the parts: SHA256SUMS (one line per part), MANIFEST.json (what was included,
+    with each part's hash) and SHARE_REPORT.md (what was excluded and why; rule IDs and
+    paths only, never a matched value). The folder must not exist yet."""
+    if txt_dir.exists():
+        raise ShardLimitError(f"{txt_dir} exists already; choose another --zip-name or remove it")
+    txt_dir.mkdir(parents=True)
+    sums = []
+    for name, text in merged:
+        f = txt_dir / os.path.basename(name)
+        with open(f, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+        sums.append(f"{hashlib.sha256(text.encode('utf-8')).hexdigest()}  {f.name}\n")
+        if debug:
+            safe_print(f"  [txt] {f}  ({len(text):,} chars)")
+    for fname, payload in (("SHA256SUMS", "".join(sums)), ("MANIFEST.json", json.dumps(manifest, indent=2)),
+                           ("SHARE_REPORT.md", report)):
+        with open(txt_dir / fname, "w", encoding="utf-8", newline="\n") as fh:   # LF on every OS
+            fh.write(payload)
+    return txt_dir
+
+
+def verify_txt_folder(folder: Path):
+    """Check a --format txt folder: every part listed in MANIFEST.json is present and unchanged,
+    SHA256SUMS agrees, and no other .txt file was added."""
+    safe_print(f"\n=== VERIFY {folder.name}/ (txt) ===")
+    bad = 0
+    man_p = folder / "MANIFEST.json"
+    if not man_p.exists():
+        safe_print("  MISSING    : MANIFEST.json")
+        return 2
+    man = json.loads(man_p.read_text(encoding="utf-8"))
+    shards = man.get("merged", {}).get("shards", [])
+    listed = {os.path.basename(sh["path"]) for sh in shards}
+    for sh in shards:
+        f = folder / os.path.basename(sh["path"])
+        if not f.exists():
+            safe_print(f"  MISSING    : {f.name}")
+            bad += 1
+            continue
+        if sha256_file(f) != sh["sha256"]:
+            safe_print(f"  CORRUPT    : {f.name}")
+            bad += 1
+    sums_p = folder / "SHA256SUMS"
+    if sums_p.exists():
+        for line in sums_p.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            digest, name = line.split(None, 1)
+            f = folder / name.strip()
+            if not f.exists() or sha256_file(f) != digest:
+                safe_print(f"  SHA256SUMS : {name.strip()} does not match")
+                bad += 1
+    else:
+        safe_print("  MISSING    : SHA256SUMS")
+        bad += 1
+    for f in sorted(folder.glob("*.txt")):
+        if f.name not in listed:
+            safe_print(f"  UNLISTED   : {f.name}  <- not in MANIFEST")
+            bad += 1
+    safe_print(f"  parts      : {len(shards)}")
+    safe_print(f"  result     : {'OK' if bad == 0 else str(bad) + ' PROBLEM(S)'}\n")
+    return 0 if bad == 0 else 2
+
+
 def render_report(manifest, exclusions, meta):
     lines = [
         f"# SmartPangolin share report — {meta['share_mode'].upper()}",
@@ -832,8 +1029,10 @@ def render_report(manifest, exclusions, meta):
         f"**Included: {manifest['file_count']} files, "
         f"{manifest['total_bytes'] / 1024:.1f} KiB**  ",
         f"**Excluded: {exclusions['count']} files**",
-        (f"**Merged: {manifest['merged']['shard_count']} shard(s) @ "
-         f"{manifest['merged']['max_chars']:,} chars**"
+        (f"**Merged: {manifest['merged']['shard_count']} part(s), each at most "
+         f"{manifest['merged']['max_chars']:,} chars"
+         + (f" and {manifest['merged']['max_bytes']:,} bytes" if manifest['merged'].get('max_bytes') else "")
+         + "**"
          if manifest["merged"]["enabled"] else "**Merged: disabled**"),
         "",
         "## Exclusions by rule",
@@ -967,6 +1166,8 @@ def purge_archive(archive_dir: Path, retention_days: int, retention_mb: int,
 # =============================================================================
 
 def verify_zip(zip_path: Path):
+    if zip_path.is_dir():
+        return verify_txt_folder(zip_path)
     if not zip_path.exists():
         safe_print(f"ERROR: {zip_path} not found")
         return 1

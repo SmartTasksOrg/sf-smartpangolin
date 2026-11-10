@@ -1,7 +1,7 @@
 {
   "name": "smartpangolin-vscode",
   "displayName": "SmartPangolin (IAIso)",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Scan a project tree for secrets in paths and content before sharing it with an LLM or third party.",
   "publisher": "smarttasks",
   "license": "Apache-2.0",
